@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)file:///D:/front-test/public/login.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<title>Tea database</title>
+	<link rel="stylesheet" type="text/css" href="./Tea database_files/style2.css">
+	<link href="./Tea database_files/css2" rel="stylesheet">
+<script src="./Tea database_files/js" async=""></script></head>
+<body>
+	<header>
+		<div class="container flex-wrap-space flex-header">			
+			<div>
+				<a id="logo" href="file:///D:/front-test/public/index.html" class="container-inline">
+					<img src="./Tea database_files/tea-logo_x85.png"> 
+				</a>
+				<div id="header-title" class="container-inline navbar-title">
+					<a href="file:///D:/front-test/public/index.html">
+						<h1>100 and 1 cup of tea</h1>
+					</a>
+					<p>
+						<span>Everything about tea and more</span>
+					</p>
+				</div>	
+			</div>				
+			<div class="log-container">		
+				<button id="log-in" onclick="document.location=&#39;login.html&#39;">Account</button>
+				<input id="search-bar" type="text" placeholder="Search...">
+			</div>		
+			
+		</div>		
+	</header>
+	<hr style="margin: 0">
+	<nav id="header-nav">
+		<div id="nav-container" class="container flex-wrap-space">	
+			<ul id="nav-list" class="navbar-collapse">
+				<li>
+					<a href="file:///D:/front-test/public/login.html#/collections" onclick="$dc.loadCollections();">Collections</a>
+				</li>
+				<hr class="visible-xs">
+				<li>
+					<a href="file:///D:/front-test/public/login.html#">About</a>
+				</li>
+				<hr class="visible-xs">
+				<li>
+					<a href="file:///D:/front-test/public/login.html#">Contacts</a>
+				</li>
+				<hr class="visible-xs">
+			</ul>
+		</div>
+	</nav>
+
+	<main id="main-content" class="container">
+        <!-- <h2 class="text-center" style="margin: 50px auto 20px">Log In</h2> -->
+		<div class="tab">
+			<button onclick="openTab();">Log In</button>
+			<button onclick="openTab();">Register</button>
+		</div>
+		<form class="form-login">
+            <div class="field-container">
+                <label class="label-login">Email:</label>
+                <input type="text" class="input-login">
+            </div>
+            <div class="field-container">
+                <label class="label-login">Password:</label>
+                <input type="text" class="input-login">
+            </div>
+            <input type="submit" value="Log In" class="submit-login">
+        </form><!-- LogIn end -->
+		<form class="form-login">
+            <div class="field-container">
+                <label class="label-login">Email:</label>
+                <input type="text" class="input-login">
+            </div>
+			<div class="field-container">
+                <label class="label-login">Username:</label>
+                <input type="text" class="input-login">
+            </div>
+			<div class="field-container">
+                <label class="label-login">Password:</label>
+                <input type="text" class="input-login">
+            </div>
+            <div class="field-container">
+                <label class="label-login">Repeat password:</label>
+                <input type="text" class="input-login">
+            </div>
+            <input type="submit" value="Register" class="submit-login">
+        </form><!-- Register end -->
+	
+    
+	<footer class="panel-footer">
+		<div class="container">
+			<div id="footer-rows" class="row">
+				<section id="footer-links" class="col-4 col-xs-12 links">
+					<span>Links:</span>
+					<ul>
+						<li>
+							<a href="file:///D:/front-test/public/tea-collections.html">Collections</a>
+						</li>
+						<li>
+							<a href="file:///D:/front-test/public/login.html#">About</a>
+						</li>
+						<li>
+							<a href="file:///D:/front-test/public/login.html#">Contacts</a>
+						</li>
+					</ul>
+					<hr class="visible-xs">
+				</section>
+				<section class="col-4 col-xs-12">
+					<q>There are few hours in a person's life that would be more pleasant than the time devoted to evening tea</q>.<br>
+					© Henry James
+					<hr class="visible-xs">
+				</section>
+				<section class="col-4 col-xs-12">
+					<div id="comming-soon" class="text-right">Comming soon</div>
+				</section>
+		</div>
+	</div></footer>
+
+	<div id="copyright">©Copyright Nikita Malashko 2021</div>
+	<!-- <script src="/__/firebase/8.3.1/firebase-app.js"></script>
+	<script src="/__/firebase/8.3.1/firebase-analytics.js"></script>
+	<script src="/__/firebase/init.js"></script> -->
+
+	<script src="./Tea database_files/firebase-app.js.&#1041;&#1077;&#1079; &#1085;&#1072;&#1079;&#1074;&#1072;&#1085;&#1080;&#1103;"></script>
+	<script src="./Tea database_files/firebase-analytics.js.&#1041;&#1077;&#1079; &#1085;&#1072;&#1079;&#1074;&#1072;&#1085;&#1080;&#1103;"></script>
+	<script src="./Tea database_files/firebase-auth.js.&#1041;&#1077;&#1079; &#1085;&#1072;&#1079;&#1074;&#1072;&#1085;&#1080;&#1103;"></script>
+	<script src="./Tea database_files/firebase-database.js.&#1041;&#1077;&#1079; &#1085;&#1072;&#1079;&#1074;&#1072;&#1085;&#1080;&#1103;"></script>
+	<script>
+		var firebaseConfig = {
+			apiKey: "AIzaSyCtfiEHzomgXmm1Nv51Gefet_Mq_aKQGHE",
+			authDomain: "teadb-34ad1.firebaseapp.com",
+			databaseURL: "https://teadb-34ad1-default-rtdb.europe-west1.firebasedatabase.app",
+			projectId: "teadb-34ad1",
+			storageBucket: "teadb-34ad1.appspot.com",
+			messagingSenderId: "1003798365344",
+			appId: "1:1003798365344:web:59feab15bb65de6ddeb5c5",
+			measurementId: "G-VZKQVKGG9N"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();	
+	</script>
+	<script src="./Tea database_files/ajax-utils.js.&#1041;&#1077;&#1079; &#1085;&#1072;&#1079;&#1074;&#1072;&#1085;&#1080;&#1103;"></script>
+	<!-- <script src="js/style.js"></script> -->
+</main></body></html>

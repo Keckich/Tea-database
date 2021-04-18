@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tea database</title>
+	<link rel="stylesheet" type="text/css" href="css/style2.css">
+	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Kavivanar&display=swap" rel="stylesheet">
+</head>
+<body>
+	<header>
+		<div class="container flex-wrap-space flex-header">			
+			<div>
+				<a id="logo" href="#" onclick="onNavigate('#/home'); return false;" class="container-inline">
+					<img src="images/tea-logo_x85.png" > 
+				</a>
+				<div id="header-title" class="container-inline navbar-title">
+					<a href=index.html>
+						<h1>100 and 1 cup of tea</h1>
+					</a>
+					<p>
+						<span>Everything about tea and more</span>
+					</p>
+				</div>	
+			</div>				
+			<div class="log-container"	>	
+				<div style="display: flex; justify-content: space-between;">
+					<!-- <button id="account" onclick="document.location='#/login'; $dc.loadLogIn();">Account</button> -->
+					<button id="account" onclick="onNavigate('#/login'); return false;">Account</button>
+					<button id="logout" onclick="logout();">Log Out</button>
+				</div>	
+					
+				<input id="search-bar" type="text" placeholder="Search...">
+			</div>		
+			
+		</div>		
+	</header>
+	<hr style="margin: 0" />
+	<nav id="header-nav">
+		<div id="nav-container" class="container flex-wrap-space">	
+			<ul id="nav-list" class="navbar-collapse">
+				<li>
+					<a href="#" onclick="onNavigate('#/collections'); return false;">Collections</a>
+				</li>
+				<hr class="visible-xs"/>
+				<li>
+					<a href="#">About</a>
+				</li>
+				<hr class="visible-xs"/>
+				<li>
+					<a href="#">Contacts</a>
+				</li>
+				<hr class="visible-xs"/>
+			</ul>
+		</div>
+	</nav>
+	<div id="main-content" class="container">
+		
+	</div>
+	<footer class="panel-footer">
+		<div class="container">
+			<div id="footer-rows" class="row">
+				<section id="footer-links" class="col-4 col-xs-12 links">
+					<span>Links:</span>
+					<ul>
+						<li>
+							<a href="tea-collections.html">Collections</a>
+						</li>
+						<li>
+							<a href="#">About</a>
+						</li>
+						<li>
+							<a href="#">Contacts</a>
+						</li>
+					</ul>
+					<hr class="visible-xs"/>
+				</section>
+				<section class="col-4 col-xs-12">
+					<q>There are few hours in a person's life that would be more pleasant than the time devoted to evening tea</q>.<br>
+					&copy; Henry James
+					<hr class="visible-xs"/>
+				</section>
+				<section class="col-4 col-xs-12">
+					<div id="comming-soon" class="text-right">Comming soon</div>
+				</section>
+		</div>
+	</footer>
+</body>
+	<div id="copyright">&copy;Copyright Nikita Malashko 2021</div>
+	<!-- <script src="/__/firebase/8.3.1/firebase-app.js"></script>
+	<script src="/__/firebase/8.3.1/firebase-analytics.js"></script>
+	<script src="/__/firebase/init.js"></script> -->
+
+	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-database.js"></script>
+	<script>
+		var firebaseConfig = {
+			apiKey: "AIzaSyCtfiEHzomgXmm1Nv51Gefet_Mq_aKQGHE",
+			authDomain: "teadb-34ad1.firebaseapp.com",
+			databaseURL: "https://teadb-34ad1-default-rtdb.europe-west1.firebasedatabase.app",
+			projectId: "teadb-34ad1",
+			storageBucket: "teadb-34ad1.appspot.com",
+			messagingSenderId: "1003798365344",
+			appId: "1:1003798365344:web:59feab15bb65de6ddeb5c5",
+			measurementId: "G-VZKQVKGG9N"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();	
+	</script>
+	<script src="js/rating.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/login.js"></script>
+	
+	
+</html>

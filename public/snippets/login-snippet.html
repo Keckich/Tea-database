@@ -1,0 +1,35 @@
+<div class="tab">
+    <button id="log-in-tab" class="tab-link active" onclick="openTab(event, 'log-in');">LogIn</button>
+    <button id="register-tab" class="tab-link" onclick="openTab(event, 'register');">Register</button>
+</div>
+<form id="log-in" class="form-login" >
+    <div class="field-container" >
+        <label class="label-login">Email:</label>
+        <input type="text" id="email-login" class="input-login">
+    </div>
+    <div class="field-container">
+        <label class="label-login">Password:</label>
+        <input type="password" id="password-login" class="input-login">
+    </div>
+    <input  value="Log In" class="submit-btn" onclick="login();">
+</form><!-- LogIn end -->
+
+<form id="register" class="form-login" >
+    <div class="field-container" >
+        <label class="label-login">Email:</label>
+        <input type="text" id="email-reg" class="input-login">
+    </div>
+    <div class="field-container" >
+        <label class="label-login">Username:</label>
+        <input type="text" id="username" class="input-login">
+    </div>
+    <div class="field-container" >
+        <label class="label-login">Password:</label>
+        <input type="password" id="password-reg" class="input-login">
+    </div>
+    <div class="field-container">
+        <label class="label-login">Repeat password:</label>
+        <input type="password" id="rep-password" class="input-login">
+    </div>
+    <input  value="Register" class="submit-btn" onclick="register();">
+</form><!-- Register end -->

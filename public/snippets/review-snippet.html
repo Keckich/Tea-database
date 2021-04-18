@@ -1,0 +1,33 @@
+<article id="input-review-container">
+    <section>
+        <h2>Reviews</h2>
+        <form id="review-form">
+            <div class="rating-area review-label">
+                <label>Rating:</label>
+                <input type="radio" id="star-5" name="rating" value="5">
+	            <label class="star-icon" for="star-5" title="«5»"></label>	
+
+                <input type="radio" id="star-4" name="rating" value="4">
+	            <label class="star-icon" for="star-4" title="«4»"></label>
+
+                <input type="radio" id="star-3" name="rating" value="3">
+	            <label class="star-icon" for="star-3" title="«3»"></label>
+
+                <input type="radio" id="star-2" name="rating" value="2">
+	            <label class="star-icon" for="star-2" title="«2»"></label>
+
+                <input type="radio" id="star-1" name="rating" value="1">
+	            <label class="star-icon" for="star-1" title="«1»"></label>
+            </div>
+            <div class="review-label">
+                <label>Title:</label>
+                <input id="review-title" type="text">
+            </div>
+            <div class="review-label">
+                <label>Review:</label>
+                <textarea id="review-input" rows="4" placeholder="Leave your review here..."></textarea>
+            </div>
+            <input id="leave-review" value="Send" class="submit-btn" onclick="writeReview('{{name}}', '{{tea_name}}');">
+        </form>
+    </section>
+</article>

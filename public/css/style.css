@@ -1,0 +1,217 @@
+body {
+	font-size: 16px;
+	color: #fff;
+	background-color: #61122f;
+	font-family: 'Kavivanar', cursive;
+	margin: 0px;
+}
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+#header-nav {
+	background-color: #f6b319;
+	/*height: 130px;*/
+}
+
+.nav {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+@media (min-width: 768px) {
+	.nav li {
+		display: inline;
+		padding-left: 30px;
+	}
+}
+.navbar {
+	position: relative;
+	min-height: 50px;
+	margin-bottom: 20px;
+}
+.navbar-nav {
+  margin: 20px 50px;
+}
+.navbar-header {
+	margin-left: 15px;
+}
+.navbar-title {
+	float: left;
+	padding: 0 15px 10px;
+	margin-bottom: 20px;
+	font-size: 22px;
+}
+.navbar-title a {
+	text-decoration: none;
+}
+.navbar-title h1 {
+	color: #557c3e;
+	font-size: 1.5em;
+	text-transform: uppercase;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px #222;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.navbar-title p {
+	font-family: 'Dancing Script', cursive;
+	color: #951C49;
+	font-size: 0.9em;
+	margin-top: 5px;
+	text-align: center;
+}
+/*@media (min-width: 768px) {
+  .navbar-header {
+    float: left;
+  }
+}*/
+.navbar-toggle {
+  position: relative;
+  float: right;
+  padding: 9px 10px;
+  margin-right: 15px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background-color: transparent;
+  background-image: none;
+  border: 1px solid #951C49;
+  border-radius: 4px;
+}
+.navbar-toggle:focus {
+  outline: 0;
+}
+.navbar-toggle:hover {
+	cursor: pointer;
+  background-color: white;	
+}
+.navbar-toggle .icon-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: #951C49;
+}
+.navbar-toggle .icon-bar + .icon-bar {
+  margin-top: 4px;
+}
+
+@media (min-width: 768px) {
+  .navbar-toggle {
+    display: none;
+  }  
+  .navbar-collapse {
+    display: none;
+  }
+}
+.navbar-collapse {
+  padding-right: 15px;
+  padding-left: 15px;
+  overflow-x: visible;
+  border-top: 1px solid transparent;
+  float: right;
+}
+@media (min-width: 768px) {
+  .navbar-collapse {
+    width: auto;
+    border-top: 0;
+    box-shadow: none;
+    display: inline;
+  }
+}
+
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/*.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}*/
+
+
+
+.pull-left {
+  float: left;
+}
+
+.visible-md,
+.visible-lg {
+  display: none;
+}
+
+#nav-list {
+	margin-top: 30px;
+	font-size: 1.5em;
+}
+#nav-list a {
+	color: #951C49;
+	text-align: center;
+	text-decoration: none;
+}
+#nav-list a:hover {
+	background: #E7E7E7;
+}
+
+/*********** Large devices ***********/
+@media (min-width: 1200px) {
+  .visible-lg {
+    display: block;
+  }
+}
+
+/*********** Medium devices ***********/
+@media (min-width: 992px) and (max-width: 1199px) {
+  .visible-md {
+    display: block;
+  }
+  #nav-list {
+  	margin-left: 50px;
+  	margin-right: 50px;
+  }
+}
+
+/*********** Small devices ***********/
+@media (min-width: 768px) and (max-width: 991px) {
+  #nav-list {
+  	margin-left: 2px;
+  	margin-right: 2px;
+  }
+}
+
+/*********** Extra small devices ***********/
+@media (max-width: 767px) {
+	.navbar-collapse {
+		width: 100%;
+	}
+	#nav-list {
+		background-color: gray;
+	}
+}
