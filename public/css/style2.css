@@ -71,7 +71,7 @@ header {
 	background: #E7E7E7;
 }	
 
-#account {
+.account-btn {
 	margin-top: auto;
 	margin-bottom: auto;
 	font-size: 1.5em;
@@ -84,7 +84,7 @@ header {
 	background-color: transparent;
 	outline: none;
 }
-#account:hover {
+.account-btn:hover {
 	cursor: pointer;
 	background-color: #E7E7E7;
 }	
@@ -94,6 +94,22 @@ header {
   font-family:  'Kavivanar', cursive;
   border-radius: 8px;
   outline: none;
+}
+#collection-select {
+	margin: auto 3px auto 0; 
+	font-size: 17px;
+	height: 31px;
+	outline: none;
+	border-radius: 8px;
+	border: 2px solid;
+	font-family:  'Kavivanar', cursive;
+}
+#search-btn {
+	margin: 10px 0px;
+    background-color: transparent;
+    border: none;
+	outline: none;
+    cursor: pointer;
 }
 
 .log-container {
@@ -257,7 +273,9 @@ footer .links a:hover {
 	outline: none;
 	box-sizing: border-box; 
 	padding: 11px 15px 11px; 
-	font-size: 15px; height: auto; 
+	font-size: 15px; 
+	font-family: 'Kavivanar', cursive;
+	height: auto; 
 	border-radius: 5px;
 }
 .label-login {
@@ -291,7 +309,8 @@ footer .links a:hover {
 	display: flex;
 	border-radius: 8px;
 	width: 450px;
-	margin: 60px auto 5px;
+	margin: 60px auto 0;
+    height: 50px;
 }
 .tab-link {
 	border: none;

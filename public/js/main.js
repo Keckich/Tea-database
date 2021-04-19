@@ -6,7 +6,8 @@ let homeHtml = "/snippets/home-snippet.html",
     singleItemHtml = "/snippets/single-item-snippet.html",
     loginHtml = "/snippets/login-snippet.html",
     reviewHtml = "/snippets/review-snippet.html",
-    singleReviewHtml = "/snippets/single-review-snippet.html";
+    singleReviewHtml = "/snippets/single-review-snippet.html",
+    searchHtml = "/snippets/search-snippet.html";
 
 let content = document.getElementById('main-content');
 asyncCall = (fileUrl) => fetch(fileUrl)
@@ -26,7 +27,8 @@ let home = asyncCall(homeHtml),
     singleTea = asyncCall(singleItemHtml),
     logIn = asyncCall(loginHtml),
     review = asyncCall(reviewHtml),
-    singleReview = asyncCall(singleReviewHtml);
+    singleReview = asyncCall(singleReviewHtml),
+    search = asyncCall(searchHtml);
 
 
 const routes = {
@@ -35,13 +37,12 @@ const routes = {
     '/collections': collections,
     '/collections/{{name}}': singleCollection,
     '/collections/{{name}}/{{tea_name}}': singleTea,
-    '/login': logIn
+    '/login': logIn,
+    '/search?tea={{search_tea}}&collection={{name}}': search
 };
 
-// document.addEventListener("DOMContentLoaded", function (event) {
-//     
-//     console.log('we r here')
-//     
+// document.addEventListener("DOMContentLoaded", function (event) {//     
+//     console.log('we r here')//     
 // })
 
 const loadCollections = (dataHtml, content, title) => {
@@ -117,26 +118,35 @@ const loadReviewSection = (request) => {
 
 const loadAllReviews = (name, tea_name) => {
     database.ref(name + '/' + tea_name + '/reviews').on("value", function (snapshot) {
-        singleReview.then(dataHtml => {
+        singleReview.then(dataHtml => { 
             let finalHtml = '';
             snapshot.forEach(function (data) {
                 let html = dataHtml;
                 html = insertProperty(html, 'date', data.val().date);
-                html = insertProperty(html, 'rev_title', data.key);
-                html = insertProperty(html, 'rev_content', data.val().content);                 
-                finalHtml += html;                
+                html = insertProperty(html, 'rev_title', data.val().title);
+                html = insertProperty(html, 'rev_content', data.val().content);
+                html = insertProperty(html, 'email', data.val().email);
+                html = insertProperty(html, 'displayName', data.val().username);
+                html = insertProperty(html, 'key', data.key);
+                finalHtml += html;
             });
             let targetElem = document.querySelector('#input-review-container');
             console.log('final:' + targetElem)
-            targetElem.insertAdjacentHTML('beforeend', finalHtml);       
-            snapshot.forEach(function (data) {
-                let stars = document.querySelectorAll('#' + data.key + ' .review-rate span')
-                for (let i = 0; i < data.val().rating; i++) {
-                    stars[i].classList.add('active');
-                }
-            });
+            if (targetElem && finalHtml) {
+                targetElem.insertAdjacentHTML('beforeend', finalHtml);
+                snapshot.forEach(function (data) {
+                    let stars = document.querySelectorAll('#' + data.key + ' .review-rate span')
+                    for (let i = 0; i < data.val().rating; i++) {
+                        stars[i].classList.add('active');
+                    }
+                });
+            }
         });
     });
+}
+
+const loadSearch = () => {
+    database.ref()
 }
 
 const parseURL = () => {
@@ -154,20 +164,23 @@ const parseURL = () => {
     return request
 }
 
-const showRating = (request) => {
-    let stars = document.querySelectorAll('.rating-result span');
-    let i = 0;
-    let rate = getRating(request.collection, request.tea);
-    rate.then(data => {
-        for (node of stars) {
-            if (data >= i + 0.5) {
-                node.classList.add('active');
+const showRating = (name, tea_name) => {
+    database.ref(name + '/' + tea_name + '/reviews').on("value", function (snapshot) {
+        let sumRating = 0,
+            markCount = snapshot.numChildren();
+        snapshot.forEach(function (data) {
+            sumRating += parseInt(data.val().rating);
+        });
+        sumRating /= markCount;
+        let stars = document.querySelectorAll('.rating-result span');
+        for (let i = 0; i < stars.length; i++) {
+            if (sumRating >= i + 0.5) {
+                stars[i].classList.add('active');
             }
             else {
                 break;
             }
-            i++;
-        };
+        }
     });
 }
 
@@ -176,27 +189,37 @@ const getReviewRating = () => {
     let rate;
     for (let star of rateStars) {
         if (star.checked) {
-            rate = star.value;         
+            rate = star.value;
             break;
-        }
-    }
+        };
+    };
     return rate;
 }
 
 const writeReview = (name, tea_name) => {
-    let title = document.getElementById('review-title').value,
-        userReview = document.getElementById('review-input').value;
-    let rate = getReviewRating()
-    database.ref(name + '/' + tea_name + '/' + 'reviews/' + title).set({
-        content: userReview,
-        rating: rate,
-        date: new Date().toLocaleString()
-    });
-  
-    database.ref(name + '/' + tea_name).update({
-        rating: rate
-    });
-
+    let user = firebase.auth().currentUser;
+    if (user) {
+        let titleReview = document.getElementById('review-title'),
+            userReview = document.getElementById('review-input');
+        let rate = getReviewRating();
+        if ((titleReview && titleReview.value) && (userReview && userReview.value) && rate) {
+            console.log('user:' + firebase.auth().currentUser.displayName)
+            database.ref(name + '/' + tea_name + '/reviews').push({
+                title: titleReview.value,
+                content: userReview.value,
+                rating: rate,
+                date: new Date().toLocaleString(),
+                username: user.displayName,
+                email: user.email
+            });
+        }
+        else {
+            alert('Error: please, fill in all the fields.')
+        }
+    }
+    else {
+        onNavigate('#/login');
+    }
 
 }
 
@@ -218,9 +241,12 @@ const loadPage = () => {
                     break;
                 case '/collections/{{name}}/{{tea_name}}':
                     loadSingleTea(dataHtml, content, request.collection, request.tea);
-                    showRating(request);
+                    showRating(request.collection, request.tea);
                     loadReviewSection(request);
                     loadAllReviews(request.collection, request.tea);
+                    break;
+                case '/search?tea={{search_tea}}&collection={{name}}':
+
                     break;
                 default:
                     content.innerHTML = dataHtml;
@@ -228,6 +254,33 @@ const loadPage = () => {
             }
         });
     }
+}
+
+const searchTea = () => {
+    let inputTea = document.getElementById('search-bar').value,
+        inputCollection = document.getElementById('collection-select').value;
+    let teaText = inputTea.trim().toLowerCase();
+    if (teaText == "") {
+        return;
+    }
+
+    if (teaText.length < 3) {
+        alert("Please, use a longer string.");
+        return;
+    }
+
+    database.ref(inputCollection).on("value", function (snapshot) {
+        let mathes = [];
+        snapshot.forEach(function (data) {
+            let teaName = data.key.toLowerCase();
+            if (teaName.includes(teaText) || teaText.includes(teaName)) {
+                mathes.push(teaName);
+            }
+        });
+        console.log('math:' + mathes);
+    });
+    console.log(inputTea, inputCollection)
+
 }
 
 const onNavigate = (pathname) => {
@@ -240,7 +293,7 @@ const onNavigate = (pathname) => {
 }
 
 window.onpopstate = () => {
-   loadPage();
+    loadPage();
 }
 
 window.onbeforeunload = () => {

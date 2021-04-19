@@ -3,7 +3,8 @@
 <head>
 	<title>Tea database</title>
 	<link rel="stylesheet" type="text/css" href="css/style2.css">
-	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Kavivanar&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Kavivanar&display=swap">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 	<header>
@@ -23,12 +24,22 @@
 			</div>				
 			<div class="log-container"	>	
 				<div style="display: flex; justify-content: space-between;">
-					<!-- <button id="account" onclick="document.location='#/login'; $dc.loadLogIn();">Account</button> -->
-					<button id="account" onclick="onNavigate('#/login'); return false;">Account</button>
-					<button id="logout" onclick="logout();">Log Out</button>
+					<button id="account" class="account-btn" onclick="onNavigate('#/login'); return false;">Account</button>
+					<button id="logout" class="account-btn" onclick="logout();">Log Out</button>
 				</div>	
-					
-				<input id="search-bar" type="text" placeholder="Search...">
+				<div style="display: flex; justify-content: end;">
+					<select id="collection-select">
+						<option disabled>Collection</option>
+						<option selected value="Black">Black</option>
+						<option value="Green">Green</option>
+						<option value="Iced">Iced</option>
+					</select>
+					<input id="search-bar" type="text" placeholder="Search...">
+					<button id="search-btn" onclick="searchTea();">
+						<i class="fa fa-search"></i>
+					</button>
+				</div>
+				
 			</div>		
 			
 		</div>		
@@ -62,7 +73,7 @@
 					<span>Links:</span>
 					<ul>
 						<li>
-							<a href="tea-collections.html">Collections</a>
+							<a href="#" onclick="onNavigate('#/collections'); return false;">Collections</a>
 						</li>
 						<li>
 							<a href="#">About</a>
