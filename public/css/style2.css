@@ -382,7 +382,7 @@ footer .links a:hover {
     margin: 10px 21px 30px;
 }
 
-#review-title {
+.review-title {
 	font-size: 20px;
 	font-family: 'Kavivanar', cursive;
     width: 100%;
@@ -391,9 +391,9 @@ footer .links a:hover {
     outline: none;
 }
 
-#review-input {
+.review-input {
 	display: block;
-    width: 100%;
+	width: 100%;
     box-sizing: border-box;
     font-size: 20px;
 	font-family: 'Kavivanar', cursive;
@@ -450,6 +450,18 @@ footer .links a:hover {
 }
 .review-title {
 	font-size: 1.4em;
+}
+/******* *******/
+
+/******* Add form *******/
+#add-photo-section {
+	margin: 0 auto;
+}
+
+#add-photo-section img {
+	display: block; 
+	width: 410px; 
+	height: 410px;
 }
 /******* *******/
 
@@ -515,6 +527,12 @@ footer .links a:hover {
 		display: block;
 		text-align: center;
 	}
+
+	/*** add-form ***/
+	#add-form {
+		flex-direction: column;
+	}
+	/*** ***/
 
 }
 /*********** Small devices ***********/

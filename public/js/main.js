@@ -7,7 +7,8 @@ let homeHtml = "/snippets/home-snippet.html",
     loginHtml = "/snippets/login-snippet.html",
     reviewHtml = "/snippets/review-snippet.html",
     singleReviewHtml = "/snippets/single-review-snippet.html",
-    searchHtml = "/snippets/search-snippet.html";
+    searchHtml = "/snippets/search-snippet.html",
+    addHtml = "/snippets/add-snippet.html";
 
 let content = document.getElementById('main-content');
 asyncCall = (fileUrl) => fetch(fileUrl)
@@ -28,7 +29,8 @@ let home = asyncCall(homeHtml),
     logIn = asyncCall(loginHtml),
     review = asyncCall(reviewHtml),
     singleReview = asyncCall(singleReviewHtml),
-    search = asyncCall(searchHtml);
+    search = asyncCall(searchHtml)
+    addTea = asyncCall(addHtml);
 
 
 const routes = {
@@ -38,7 +40,8 @@ const routes = {
     '/collections/{{name}}': singleCollection,
     '/collections/{{name}}/{{tea_name}}': singleTea,
     '/login': logIn,
-    '/search?tea={{search_tea}}&collection={{name}}': search
+    '/search?tea={{search_tea}}&collection={{name}}': search,
+    '/add': addTea
 };
 
 // document.addEventListener("DOMContentLoaded", function (event) {//     
@@ -145,21 +148,35 @@ const loadAllReviews = (name, tea_name) => {
     });
 }
 
-const loadSearch = () => {
-    database.ref()
+const loadSearch = (dataHtml, tea_name) => {
+    dataHtml = insertProperty(dataHtml, 'search_tea', tea_name);
+    content.innerHTML = dataHtml;
 }
 
 const parseURL = () => {
     let url = location.hash.slice(1) || '/';
-    let r = url.split("/");
+    let r = '';
     let request = {
         resource: null,
         collection: null,
         tea: null
+    };
+    if (url.includes('&')) {
+        r = url.split("&");
+        console.log('r[0]:' + r[0])
+        request.resource = r[0].split("?")[0].split("/")[1]
+        request.collection = r[1].split("=").pop()        
+        request.tea = r[0].split("=").pop()
     }
-    request.resource = r[1];
-    request.collection = r[2];
-    request.tea = r[3];
+    else {
+        r = url.split("/");
+        request.resource = r[1];
+        request.collection = r[2];
+        request.tea = r[3];
+    }
+    console.log('r:' + r)
+
+    
 
     return request
 }
@@ -224,10 +241,12 @@ const writeReview = (name, tea_name) => {
 }
 
 const loadPage = () => {
-    let request = parseURL()
+    let request = parseURL();
+    console.log('coll:' + request.collection + ', tea:' + request.tea + ', res:' + request.resource)
     let parsedURL = (request.resource ? '/' + request.resource : '/') +
-        (request.collection ? '/{{name}}' : '') +
-        (request.tea ? '/{{tea_name}}' : '');
+        (request.resource == 'search' ? '?tea={{search_tea}}&collection={{name}}' : (request.collection ? '/{{name}}' : '') +
+        (request.tea ? '/{{tea_name}}' : ''));
+        
     console.log('parsedURL:' + parsedURL)
     if (parsedURL in routes) {
         showLoading('#main-content')
@@ -246,7 +265,8 @@ const loadPage = () => {
                     loadAllReviews(request.collection, request.tea);
                     break;
                 case '/search?tea={{search_tea}}&collection={{name}}':
-
+                    console.log('WE R HERE')
+                    loadSearch(dataHtml, request.tea);
                     break;
                 default:
                     content.innerHTML = dataHtml;
@@ -269,18 +289,37 @@ const searchTea = () => {
         return;
     }
 
-    database.ref(inputCollection).on("value", function (snapshot) {
-        let mathes = [];
-        snapshot.forEach(function (data) {
-            let teaName = data.key.toLowerCase();
-            if (teaName.includes(teaText) || teaText.includes(teaName)) {
-                mathes.push(teaName);
+    database.ref(inputCollection).on("value", function (snapshot) {        
+        onNavigate('#/search?tea=' + teaText + '&collection=' + inputCollection);
+        
+        singleCollection.then(dataHtml => {
+            let finalHtml = "<article class='row'>";
+            let mathes = [];
+            snapshot.forEach(function (data) {
+                let tea_name_low = data.key.toLowerCase();
+                if (tea_name_low.includes(teaText) || teaText.includes(tea_name_low)) {
+                    let html = dataHtml;
+                    let tea_name = data.key;
+                    html = insertProperty(html, 'tea_name', tea_name);
+                    html = insertProperty(html, 'name', inputCollection);
+                    finalHtml += html;                   
+                    mathes.push(tea_name_low);
+                }
+            });
+            finalHtml += '</article>';
+            if (mathes.length == 0) {
+                let targetElem = document.querySelector('#no-matches');
+                targetElem.style.display = "block";
             }
+            else {
+                let targetElem = document.querySelector('#searched-for');
+                targetElem.insertAdjacentHTML('afterend', finalHtml);  
+            }
+             
         });
-        console.log('math:' + mathes);
+        
+        
     });
-    console.log(inputTea, inputCollection)
-
 }
 
 const onNavigate = (pathname) => {
