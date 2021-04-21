@@ -11,29 +11,40 @@ function openTab(event, tabName) {
 	event.currentTarget.className += " active";
 }
 
+
+function logout () {
+	firebase.auth().signOut().then(() => {
+		// Sign-out successful.
+		//window.alert('Log out successful');
+		onNavigate('#/home');
+	}).catch((error) => {
+		// An error happened.
+	});
+}
+
 firebase.auth().onAuthStateChanged(function(user) {
-	let btnOut = document.getElementById("logout");
-	let btnAcc = document.getElementById("account");
+	let btnAcc = document.getElementById("account"),
+		btnAdd = document.getElementById("add-new");
 	if (user) {
 	  	// User is signed in.
-	  	// window.location = "index.html";			
-		// btnAcc.innerHTML = "Hi, " + user.displayName;
-		// btnAcc.setAttribute('onclick', 'logout();');
-		
-		
-		
-		btnOut.style.display = "flex";
-		btnAcc.style.display = "none";
-		console.log('we signed')
+		btnAdd.style.display = "flex";
+		btnAcc.innerText = "Log out"
+		btnAcc.style.width = '45%';
+		btnAcc.onclick = () => {
+			logout();
+		} 
+		console.log('we signed');
 	} else {
 	  	// No user is signed in.
-	  	// btnAcc.onclick = document.location='#/login';
-	  	// btnAcc.onclick = $dc.loadLogIn();
-	  	// btnAcc.setAttribute('onclick', document.location='#/login')
-		btnOut.style.display = "none";
-		btnAcc.style.display = "flex";
-		console.log('we not signed')
-		console.log(window.location.origin)
+		btnAdd.style.display = "none";
+		btnAcc.innerText = "Account";
+		btnAcc.style.width = '100%';
+		btnAcc.onclick = () => {
+			onNavigate('#/login');
+			return false;
+		};	 
+		
+		console.log('we not signed');
 	}
   });
 
@@ -94,12 +105,3 @@ function register() {
 
 }
 
-function logout () {
-	firebase.auth().signOut().then(() => {
-		// Sign-out successful.
-		//window.alert('Log out successful');
-		onNavigate('#/home');
-	}).catch((error) => {
-		// An error happened.
-	});
-}

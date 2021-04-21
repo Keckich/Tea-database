@@ -2,27 +2,36 @@
 <form id="add-form" style="display: flex; justify-content: space-between;">
     <section>
         <div class="review-label">
+            <label>Collection:</label>
+            <select id="new-tea-collection" class="collection-select">
+                <option disabled>Collection</option>
+                <option selected value="Black">Black</option>
+                <option value="Green">Green</option>
+                <option value="Iced">Iced</option>
+            </select>           
+        </div>
+        <div class="review-label">
             <label>Name:</label>
-            <input type="text" class="review-title">
+            <input id="new-tea-name" type="text" class="review-title">
         </div>
         <div class="review-label">
             <label>Price:</label>
-            <input type="text" class="review-title">
+            <input id="new-tea-price" type="text" class="review-title">
         </div>
         <div class="review-label">
             <label>Description:</label>
-            <textarea class="review-input" rows="4" placeholder="Put your words here..."></textarea>
+            <textarea id="new-tea-description" class="review-input" rows="4" placeholder="Put your words here..."></textarea>
         </div>
         <div class="review-label">
             <label>Where did you get this tea?</label>
-            <input type="text" class="review-title">
+            <input id="new-tea-place" type="text" class="review-title">
         </div>
-        <input  value="Send" class="submit-btn">
+        <input  value="Send" class="submit-btn" onclick="addNewTea();">
     </section>
     <section id="add-photo-section">
         <h3>Photo of your tea:</h3>
-        <img src="1.png">
-        <input type="file">
+        <img id="tea-photo" src="1.png">
+        <input id="select-img" type="file" onclick="showImg(event);">
     </section>
     
 </form>

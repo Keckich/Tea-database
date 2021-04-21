@@ -83,6 +83,7 @@ header {
 	border-radius: 8px;
 	background-color: transparent;
 	outline: none;
+	width: 45%;
 }
 .account-btn:hover {
 	cursor: pointer;
@@ -95,7 +96,7 @@ header {
   border-radius: 8px;
   outline: none;
 }
-#collection-select {
+.collection-select {
 	margin: auto 3px auto 0; 
 	font-size: 17px;
 	height: 31px;
@@ -190,6 +191,9 @@ header {
 }
 
 .category-tile {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	position: relative;
 	border: 2px solid #3F0C1F;
 	overflow: hidden;
@@ -197,13 +201,28 @@ header {
 	height: 200px;
 	margin: 0 auto 15px;
 }
-.category-tile #tea-name {
+.category-tile > img {
+	min-width: 100%;
+	min-height: 100%;
+}
+.category-tile > .tea-name {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
 	color: white;
 	background-color: black;
 	opacity: .9;
+}
+
+.img-section {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	overflow: hidden;
+}
+.img-section > img {
+	min-width: 100%;
+    min-height: 100%;
 }
 .category-tile:hover {
 	box-shadow: 0 1px 5px 1px white;

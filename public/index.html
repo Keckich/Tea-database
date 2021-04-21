@@ -25,11 +25,10 @@
 			<div class="log-container"	>	
 				<div style="display: flex; justify-content: space-between;">
 					<button id="account" class="account-btn" onclick="onNavigate('#/login'); return false;">Account</button>
-					<button id="logout" class="account-btn" onclick="logout();">Log Out</button>
 					<button id="add-new" class="account-btn" onclick="onNavigate('#/add'); return false;">Add tea</button>
 				</div>	
 				<div style="display: flex; justify-content: end;">
-					<select id="collection-select">
+					<select id="collection-select" class="collection-select"> 
 						<option disabled>Collection</option>
 						<option selected value="Black">Black</option>
 						<option value="Green">Green</option>
@@ -54,6 +53,10 @@
 				</li>
 				<hr class="visible-xs"/>
 				<li>
+					<a href="#" onclick="onNavigate('#/users-tea'); return false;">User's tea</a>
+				</li>
+				<hr class="visible-xs"/>
+				<li>
 					<a href="#">About</a>
 				</li>
 				<hr class="visible-xs"/>
@@ -75,6 +78,9 @@
 					<ul>
 						<li>
 							<a href="#" onclick="onNavigate('#/collections'); return false;">Collections</a>
+						</li>
+						<li>
+							<a href="#" onclick="onNavigate('#/users-tea'); return false;">User's tea</a>
 						</li>
 						<li>
 							<a href="#">About</a>
@@ -104,6 +110,7 @@
 	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-analytics.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-storage.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-database.js"></script>
 	<script>
 		var firebaseConfig = {

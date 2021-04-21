@@ -8,7 +8,10 @@ let homeHtml = "/snippets/home-snippet.html",
     reviewHtml = "/snippets/review-snippet.html",
     singleReviewHtml = "/snippets/single-review-snippet.html",
     searchHtml = "/snippets/search-snippet.html",
-    addHtml = "/snippets/add-snippet.html";
+    addHtml = "/snippets/add-snippet.html",
+    userCollHtml = "/snippets/user-coll-snippet.html",
+    userSingleCollHtml = "/snippets/single-user-coll-snippet.html",
+    userSingleItemHtml = "snippets/single-user-item-snippet.html";
 
 let content = document.getElementById('main-content');
 asyncCall = (fileUrl) => fetch(fileUrl)
@@ -21,7 +24,7 @@ asyncCall = (fileUrl) => fetch(fileUrl)
 // }
 
 let home = asyncCall(homeHtml),
-    collections = asyncCall(collectionsHtml)
+    collections = asyncCall(collectionsHtml),
     collectionsTitle = asyncCall(collectionsTitleHtml),
     singleCollection = asyncCall(singleCollectionHtml),
     singleCollectionTitle = asyncCall(singleCollectionTitleHtml),
@@ -29,8 +32,11 @@ let home = asyncCall(homeHtml),
     logIn = asyncCall(loginHtml),
     review = asyncCall(reviewHtml),
     singleReview = asyncCall(singleReviewHtml),
-    search = asyncCall(searchHtml)
-    addTea = asyncCall(addHtml);
+    search = asyncCall(searchHtml),
+    addTea = asyncCall(addHtml),
+    userCollections = asyncCall(userCollHtml),
+    userSingleCollection = asyncCall(userSingleCollHtml),
+    userSingleItem = asyncCall(userSingleItemHtml);
 
 
 const routes = {
@@ -39,6 +45,9 @@ const routes = {
     '/collections': collections,
     '/collections/{{name}}': singleCollection,
     '/collections/{{name}}/{{tea_name}}': singleTea,
+    '/users-tea': userCollections,
+    '/users-tea/{{name}}': userSingleCollection,
+    '/users-tea/{{name}}/{{tea_name}}': userSingleItem,
     '/login': logIn,
     '/search?tea={{search_tea}}&collection={{name}}': search,
     '/add': addTea
@@ -74,10 +83,31 @@ const loadSingleCollection = (dataHtml, content, name, title) => {
             finalHtml = insertProperty(finalHtml, 'name', name);
             finalHtml += "<article class='row'>";
             snapshot.forEach(function (data) {
+                if (data.key == "Users") {
+                    return   
+                }
                 let html = dataHtml;
-                let tea_name = data.key;
-                html = insertProperty(html, 'tea_name', tea_name);
+                html = insertProperty(html, 'tea_name', data.key);
                 html = insertProperty(html, 'name', name);
+                finalHtml += html;
+            });
+            finalHtml += '</article>';
+            content.innerHTML = finalHtml;
+        });
+    });
+}
+
+const loadUserSingleColleciton = (dataHtml, content,  name, title) => {
+    database.ref(name + '/Users').on("value", function (snapshot) {
+        title.then(titleHtml => {
+            let finalHtml = titleHtml;
+            finalHtml = insertProperty(finalHtml, 'name', name);
+            finalHtml += "<article class='row'>";
+            snapshot.forEach(function (data) {
+                let html = dataHtml;
+                html = insertProperty(html, 'tea_name', data.key);
+                html = insertProperty(html, 'name', name);
+                html = insertProperty(html, 'img_url', data.val().link);
                 finalHtml += html;
             });
             finalHtml += '</article>';
@@ -110,18 +140,38 @@ const loadSingleTea = (dataHtml, content, name, tea_name) => {
     });
 }
 
-const loadReviewSection = (request) => {
+const loadUserSingleTea = (dataHtml, content, name, tea_name) => {
+    database.ref(name + '/Users/' + tea_name).on("value", function (snapshot) {
+        let finalHtml = '<article class="row flex-wrap-space">';
+        finalHtml += dataHtml;
+        finalHtml = insertProperty(finalHtml, 'name', name);
+        finalHtml = insertProperty(finalHtml, 'tea_name', snapshot.key);
+        finalHtml = insertProperty(finalHtml, 'cost', snapshot.val().cost);
+        finalHtml = insertProperty(finalHtml, 'img_url', snapshot.val().link);
+        finalHtml = insertProperty(finalHtml, 'place', snapshot.val().place);
+        finalHtml = insertProperty(finalHtml, 'description', snapshot.val().description);
+        finalHtml += '</article>'
+        content.innerHTML = finalHtml;
+    });
+}
+
+const loadReviewSection = (request, users) => {
     let targetElem = document.querySelector('#main-content');
     review.then(reviewSection => {
         reviewSection = insertProperty(reviewSection, 'name', request.collection);
         reviewSection = insertProperty(reviewSection, 'tea_name', request.tea);
+        if (users) {
+            reviewSection = insertProperty(reviewSection, 'users', users);
+        }
         targetElem.insertAdjacentHTML('beforeend', reviewSection);
     })
 }
 
-const loadAllReviews = (name, tea_name) => {
-    database.ref(name + '/' + tea_name + '/reviews').on("value", function (snapshot) {
-        singleReview.then(dataHtml => { 
+const loadAllReviews = (name, tea_name, users) => {
+    let dbRef = (users ? database.ref(name + '/Users/' + tea_name + '/reviews') : 
+                database.ref(name + '/' + tea_name + '/reviews'));
+    dbRef.on("value", function (snapshot) {
+        singleReview.then(dataHtml => {
             let finalHtml = '';
             snapshot.forEach(function (data) {
                 let html = dataHtml;
@@ -165,7 +215,7 @@ const parseURL = () => {
         r = url.split("&");
         console.log('r[0]:' + r[0])
         request.resource = r[0].split("?")[0].split("/")[1]
-        request.collection = r[1].split("=").pop()        
+        request.collection = r[1].split("=").pop()
         request.tea = r[0].split("=").pop()
     }
     else {
@@ -176,13 +226,15 @@ const parseURL = () => {
     }
     console.log('r:' + r)
 
-    
+
 
     return request
 }
 
-const showRating = (name, tea_name) => {
-    database.ref(name + '/' + tea_name + '/reviews').on("value", function (snapshot) {
+const showRating = (name, tea_name, users) => {
+    let dbRef = (users ? database.ref(name + '/Users/' + tea_name + '/reviews') : 
+                database.ref(name + '/' + tea_name + '/reviews'));
+    dbRef.on("value", function (snapshot) {
         let sumRating = 0,
             markCount = snapshot.numChildren();
         snapshot.forEach(function (data) {
@@ -213,15 +265,16 @@ const getReviewRating = () => {
     return rate;
 }
 
-const writeReview = (name, tea_name) => {
+const writeReview = (name, tea_name, users) => {
     let user = firebase.auth().currentUser;
     if (user) {
         let titleReview = document.getElementById('review-title'),
             userReview = document.getElementById('review-input');
         let rate = getReviewRating();
         if ((titleReview && titleReview.value) && (userReview && userReview.value) && rate) {
-            console.log('user:' + firebase.auth().currentUser.displayName)
-            database.ref(name + '/' + tea_name + '/reviews').push({
+            console.log('user:' + users);
+            let dbRef = (users=='{{users}}' ? database.ref(name + '/' + tea_name + '/reviews') : database.ref(name + '/Users/' + tea_name + '/reviews'))
+            dbRef.push({
                 title: titleReview.value,
                 content: userReview.value,
                 rating: rate,
@@ -245,8 +298,8 @@ const loadPage = () => {
     console.log('coll:' + request.collection + ', tea:' + request.tea + ', res:' + request.resource)
     let parsedURL = (request.resource ? '/' + request.resource : '/') +
         (request.resource == 'search' ? '?tea={{search_tea}}&collection={{name}}' : (request.collection ? '/{{name}}' : '') +
-        (request.tea ? '/{{tea_name}}' : ''));
-        
+            (request.tea ? '/{{tea_name}}' : ''));
+
     console.log('parsedURL:' + parsedURL)
     if (parsedURL in routes) {
         showLoading('#main-content')
@@ -255,14 +308,26 @@ const loadPage = () => {
                 case '/collections':
                     loadCollections(dataHtml, content, collectionsTitle);
                     break;
+                case '/users-tea':
+                    loadCollections(dataHtml, content, collectionsTitle);
+                    break;
                 case '/collections/{{name}}':
                     loadSingleCollection(dataHtml, content, request.collection, singleCollectionTitle);
+                    break;
+                case '/users-tea/{{name}}':
+                    loadUserSingleColleciton(dataHtml, content, request.collection, singleCollectionTitle)
                     break;
                 case '/collections/{{name}}/{{tea_name}}':
                     loadSingleTea(dataHtml, content, request.collection, request.tea);
                     showRating(request.collection, request.tea);
                     loadReviewSection(request);
                     loadAllReviews(request.collection, request.tea);
+                    break;
+                case '/users-tea/{{name}}/{{tea_name}}':
+                    loadUserSingleTea(dataHtml, content, request.collection, request.tea)
+                    showRating(request.collection, request.tea, 'Users');
+                    loadReviewSection(request, 'Users');
+                    loadAllReviews(request.collection, request.tea, 'Users');
                     break;
                 case '/search?tea={{search_tea}}&collection={{name}}':
                     console.log('WE R HERE')
@@ -274,6 +339,39 @@ const loadPage = () => {
             }
         });
     }
+}
+
+const getSearchedItems = (inputCollection, teaText, urn, htmlPromise, users) => {
+    database.ref(urn).on("value", function (snapshot) {        
+        let finalHtml = "";
+        let matches = [];
+        htmlPromise.then(dataHtml => {             
+            snapshot.forEach(function (data) {
+                let tea_name_low = data.key.toLowerCase();
+                if (data.key == "Users") {
+                    return
+                }                
+                if (tea_name_low.includes(teaText) || teaText.includes(tea_name_low)) {
+                    let html = dataHtml;
+                    html = insertProperty(html, 'tea_name', data.key);
+                    html = insertProperty(html, 'name', inputCollection);
+                    if (users) {
+                        html = insertProperty(html, 'img_url', data.val().link);
+                    }
+                    finalHtml += html;
+                    matches.push(tea_name_low);
+                }
+            });
+            if (matches.length == 0) {
+                let targetElem = (users ? document.querySelector('#no-matches-users') : document.querySelector('#no-matches-our'));
+                targetElem.style.display = "block";
+            }
+            console.log(finalHtml)
+            let targetElem = document.querySelector('#search-res');
+            targetElem.insertAdjacentHTML('afterbegin', finalHtml);
+            
+        });
+    });
 }
 
 const searchTea = () => {
@@ -288,38 +386,65 @@ const searchTea = () => {
         alert("Please, use a longer string.");
         return;
     }
+    onNavigate('#/search?tea=' + teaText + '&collection=' + inputCollection);
+    getSearchedItems(inputCollection, teaText, inputCollection, singleCollection);
+    getSearchedItems(inputCollection, teaText, inputCollection + '/Users', userSingleCollection, 'Users');    
+}
 
-    database.ref(inputCollection).on("value", function (snapshot) {        
-        onNavigate('#/search?tea=' + teaText + '&collection=' + inputCollection);
-        
-        singleCollection.then(dataHtml => {
-            let finalHtml = "<article class='row'>";
-            let mathes = [];
-            snapshot.forEach(function (data) {
-                let tea_name_low = data.key.toLowerCase();
-                if (tea_name_low.includes(teaText) || teaText.includes(tea_name_low)) {
-                    let html = dataHtml;
-                    let tea_name = data.key;
-                    html = insertProperty(html, 'tea_name', tea_name);
-                    html = insertProperty(html, 'name', inputCollection);
-                    finalHtml += html;                   
-                    mathes.push(tea_name_low);
-                }
-            });
-            finalHtml += '</article>';
-            if (mathes.length == 0) {
-                let targetElem = document.querySelector('#no-matches');
-                targetElem.style.display = "block";
-            }
-            else {
-                let targetElem = document.querySelector('#searched-for');
-                targetElem.insertAdjacentHTML('afterend', finalHtml);  
-            }
-             
+let files = []
+const showImg = (event) => {
+    let reader;
+    event.currentTarget.onchange = event => {
+        files = event.target.files;
+        reader = new FileReader();
+        let photo = document.getElementById("tea-photo");
+        reader.onload = () => {
+            photo.src = reader.result;
+        }
+        reader.readAsDataURL(files[0]);
+    }
+}
+
+const addNewTea = () => {
+    let teaName = document.getElementById("new-tea-name"),
+        teaColl = document.getElementById("new-tea-collection"),
+        teaPrice = document.getElementById("new-tea-price"),
+        teaDescription = document.getElementById("new-tea-description"),
+        teaPlace = document.getElementById("new-tea-place");
+    let user = firebase.auth().currentUser
+    if ((teaName && teaName.value) && (teaPrice && teaPrice.value) &&
+        (teaDescription && teaDescription.value)) {
+        let imgUrl = '';
+        let uploadTask;   
+        database.ref(teaColl.value + '/Users/' + teaName.value).set({
+            cost: teaPrice.value,
+            place: teaPlace.value,
+            description: teaDescription.value,
+            email: user.email,
+            username: user.displayName,
+            uid: user.uid
         });
-        
-        
-    });
+        console.log('photo:' + files[0])
+        if (files[0]) {
+            uploadTask = firebase.storage().ref('images/' + user.uid + '/' + teaName.value).put(files[0]);            
+            uploadTask.on('state_changed', function () {
+                uploadTask.snapshot.ref.getDownloadURL().then(function (url) {
+                    imgUrl = url;
+                    firebase.database().ref(teaColl.value + '/Users/' + teaName.value).update({
+                        link: imgUrl
+                    });
+                });
+            });
+        }
+        alert("Success!");        
+    }
+    else {
+        alert("Please, fill in name, price and description.")
+        return
+    }
+
+
+
 }
 
 const onNavigate = (pathname) => {
