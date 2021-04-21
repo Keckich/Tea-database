@@ -89,10 +89,29 @@ const loadSingleCollection = (dataHtml, content, name, title) => {
                 let html = dataHtml;
                 html = insertProperty(html, 'tea_name', data.key);
                 html = insertProperty(html, 'name', name);
+                html = insertProperty(html, 'cost', data.val().cost);
+                database.ref(name + '/' + data.key + '/reviews').on("value", function(reviews) {
+                    let markCount = reviews.numChildren();
+                    if (markCount) {
+                        html = insertProperty(html, 'count', markCount);
+                    }
+                    else {
+                        html = insertProperty(html, 'count', 0);
+                    }
+                });
+                
                 finalHtml += html;
             });
             finalHtml += '</article>';
             content.innerHTML = finalHtml;
+            snapshot.forEach(function (data) {
+                if (data.key == "Users") {
+                    return   
+                }
+                let stars = document.querySelectorAll('#' + data.key + ' span');
+                showRating(name, data.key, stars) 
+            });            
+                
         });
     });
 }
@@ -107,21 +126,44 @@ const loadUserSingleColleciton = (dataHtml, content,  name, title) => {
                 let html = dataHtml;
                 html = insertProperty(html, 'tea_name', data.key);
                 html = insertProperty(html, 'name', name);
+                html = insertProperty(html, 'cost', data.val().cost)
                 html = insertProperty(html, 'img_url', data.val().link);
+                database.ref(name + '/Users/' + data.key + '/reviews').on("value", function(reviews) {
+                    let markCount = reviews.numChildren();
+                    if (markCount) {
+                        html = insertProperty(html, 'count', markCount);
+                    }
+                    else {
+                        html = insertProperty(html, 'count', 0);
+                    }
+                });
                 finalHtml += html;
             });
             finalHtml += '</article>';
             content.innerHTML = finalHtml;
+            snapshot.forEach(function (data) {
+                let stars = document.querySelectorAll('#' + data.key + ' span');
+                showRating(name, data.key, stars, "Users") 
+            });
         });
     });
 }
 
-const loadSingleTea = (dataHtml, content, name, tea_name) => {
-    database.ref(name + '/' + tea_name).on("value", function (snapshot) {
+const loadSingleTea = (dataHtml, content, name, teaName) => {
+    database.ref(name + '/' + teaName).on("value", function (snapshot) {
         let finalHtml = '<article id="single-unit" class="row flex-wrap-space">';
         finalHtml += dataHtml;
         finalHtml = insertProperty(finalHtml, 'name', name);
         finalHtml = insertProperty(finalHtml, 'tea_name', snapshot.key);
+        database.ref(name + '/' + snapshot.key + '/reviews').on("value", function(reviews) {
+            let markCount = reviews.numChildren();
+            if (markCount) {
+                finalHtml = insertProperty(finalHtml, 'count', markCount);
+            }
+            else {
+                finalHtml = insertProperty(finalHtml, 'count', 0);
+            }
+        });
         finalHtml = insertProperty(finalHtml, 'cost', snapshot.val().cost);
         finalHtml = insertProperty(finalHtml, 'brand', snapshot.val().brand);
         finalHtml = insertProperty(finalHtml, 'item_form', snapshot.val().item_form);
@@ -140,8 +182,8 @@ const loadSingleTea = (dataHtml, content, name, tea_name) => {
     });
 }
 
-const loadUserSingleTea = (dataHtml, content, name, tea_name) => {
-    database.ref(name + '/Users/' + tea_name).on("value", function (snapshot) {
+const loadUserSingleTea = (dataHtml, content, name, teaName) => {
+    database.ref(name + '/Users/' + teaName).on("value", function (snapshot) {
         let finalHtml = '<article class="row flex-wrap-space">';
         finalHtml += dataHtml;
         finalHtml = insertProperty(finalHtml, 'name', name);
@@ -167,9 +209,9 @@ const loadReviewSection = (request, users) => {
     })
 }
 
-const loadAllReviews = (name, tea_name, users) => {
-    let dbRef = (users ? database.ref(name + '/Users/' + tea_name + '/reviews') : 
-                database.ref(name + '/' + tea_name + '/reviews'));
+const loadAllReviews = (name, teaName, users) => {
+    let dbRef = (users ? database.ref(name + '/Users/' + teaName + '/reviews') : 
+                database.ref(name + '/' + teaName + '/reviews'));
     dbRef.on("value", function (snapshot) {
         singleReview.then(dataHtml => {
             let finalHtml = '';
@@ -198,8 +240,8 @@ const loadAllReviews = (name, tea_name, users) => {
     });
 }
 
-const loadSearch = (dataHtml, tea_name) => {
-    dataHtml = insertProperty(dataHtml, 'search_tea', tea_name);
+const loadSearch = (dataHtml, teaName) => {
+    dataHtml = insertProperty(dataHtml, 'search_tea', teaName);
     content.innerHTML = dataHtml;
 }
 
@@ -231,9 +273,9 @@ const parseURL = () => {
     return request
 }
 
-const showRating = (name, tea_name, users) => {
-    let dbRef = (users ? database.ref(name + '/Users/' + tea_name + '/reviews') : 
-                database.ref(name + '/' + tea_name + '/reviews'));
+const showRating = (name, teaName, stars, users) => {
+    let dbRef = (users ? database.ref(name + '/Users/' + teaName + '/reviews') : 
+                database.ref(name + '/' + teaName + '/reviews'));
     dbRef.on("value", function (snapshot) {
         let sumRating = 0,
             markCount = snapshot.numChildren();
@@ -241,7 +283,7 @@ const showRating = (name, tea_name, users) => {
             sumRating += parseInt(data.val().rating);
         });
         sumRating /= markCount;
-        let stars = document.querySelectorAll('.rating-result span');
+        
         for (let i = 0; i < stars.length; i++) {
             if (sumRating >= i + 0.5) {
                 stars[i].classList.add('active');
@@ -265,7 +307,7 @@ const getReviewRating = () => {
     return rate;
 }
 
-const writeReview = (name, tea_name, users) => {
+const writeReview = (name, teaName, users) => {
     let user = firebase.auth().currentUser;
     if (user) {
         let titleReview = document.getElementById('review-title'),
@@ -273,7 +315,7 @@ const writeReview = (name, tea_name, users) => {
         let rate = getReviewRating();
         if ((titleReview && titleReview.value) && (userReview && userReview.value) && rate) {
             console.log('user:' + users);
-            let dbRef = (users=='{{users}}' ? database.ref(name + '/' + tea_name + '/reviews') : database.ref(name + '/Users/' + tea_name + '/reviews'))
+            let dbRef = (users=='{{users}}' ? database.ref(name + '/' + teaName + '/reviews') : database.ref(name + '/Users/' + teaName + '/reviews'))
             dbRef.push({
                 title: titleReview.value,
                 content: userReview.value,
@@ -299,7 +341,7 @@ const loadPage = () => {
     let parsedURL = (request.resource ? '/' + request.resource : '/') +
         (request.resource == 'search' ? '?tea={{search_tea}}&collection={{name}}' : (request.collection ? '/{{name}}' : '') +
             (request.tea ? '/{{tea_name}}' : ''));
-
+    let stars;
     console.log('parsedURL:' + parsedURL)
     if (parsedURL in routes) {
         showLoading('#main-content')
@@ -315,17 +357,19 @@ const loadPage = () => {
                     loadSingleCollection(dataHtml, content, request.collection, singleCollectionTitle);
                     break;
                 case '/users-tea/{{name}}':
-                    loadUserSingleColleciton(dataHtml, content, request.collection, singleCollectionTitle)
+                    loadUserSingleColleciton(dataHtml, content, request.collection, singleCollectionTitle);
                     break;
                 case '/collections/{{name}}/{{tea_name}}':
                     loadSingleTea(dataHtml, content, request.collection, request.tea);
-                    showRating(request.collection, request.tea);
+                    stars = document.querySelectorAll('.rating-result span');
+                    showRating(request.collection, request.tea, stars);
                     loadReviewSection(request);
                     loadAllReviews(request.collection, request.tea);
                     break;
                 case '/users-tea/{{name}}/{{tea_name}}':
-                    loadUserSingleTea(dataHtml, content, request.collection, request.tea)
-                    showRating(request.collection, request.tea, 'Users');
+                    loadUserSingleTea(dataHtml, content, request.collection, request.tea);
+                    stars = document.querySelectorAll('.rating-result span');
+                    showRating(request.collection, request.tea, stars, 'Users');
                     loadReviewSection(request, 'Users');
                     loadAllReviews(request.collection, request.tea, 'Users');
                     break;
@@ -347,11 +391,11 @@ const getSearchedItems = (inputCollection, teaText, urn, htmlPromise, users) => 
         let matches = [];
         htmlPromise.then(dataHtml => {             
             snapshot.forEach(function (data) {
-                let tea_name_low = data.key.toLowerCase();
+                let teaNameLow = data.key.toLowerCase();
                 if (data.key == "Users") {
                     return
                 }                
-                if (tea_name_low.includes(teaText) || teaText.includes(tea_name_low)) {
+                if (teaNameLow.includes(teaText) || teaText.includes(teaNameLow)) {
                     let html = dataHtml;
                     html = insertProperty(html, 'tea_name', data.key);
                     html = insertProperty(html, 'name', inputCollection);
@@ -359,7 +403,7 @@ const getSearchedItems = (inputCollection, teaText, urn, htmlPromise, users) => 
                         html = insertProperty(html, 'img_url', data.val().link);
                     }
                     finalHtml += html;
-                    matches.push(tea_name_low);
+                    matches.push(teaNameLow);
                 }
             });
             if (matches.length == 0) {
