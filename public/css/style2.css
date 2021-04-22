@@ -79,15 +79,23 @@ header {
 	color: #951C49;
 	text-align: center;
 	text-decoration: none;
-	border: 1px solid #951C49;
+    background-color: white;
+    border: 0;
 	border-radius: 8px;
-	background-color: transparent;
+    box-shadow: 0px 5px 10px;
+    transition: all .3s;
 	outline: none;
 	width: 45%;
 }
 .account-btn:hover {
 	cursor: pointer;
 	background-color: #E7E7E7;
+	box-shadow: 0px 15px 25px -5px;
+	transform: scale(1.03);
+}
+.account-btn:active {
+	box-shadow: 0px 4px 8px;
+	transform: scale(.98);
 }	
 #search-bar {
   margin: 10px 0 10px;
@@ -111,6 +119,13 @@ header {
     border: none;
 	outline: none;
     cursor: pointer;
+}
+
+.most-rated-section {
+	background: #9B627E;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px;
 }
 
 .log-container {

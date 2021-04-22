@@ -53,9 +53,121 @@ const routes = {
     '/add': addTea
 };
 
-// document.addEventListener("DOMContentLoaded", function (event) {//     
-//     console.log('we r here')//     
-// })
+
+const loadHome = () => {
+    database.ref('collections').on("value", function (collections) { 
+        let mostRated = [],
+            mostRatedUsers = [];  
+        collections.forEach(function (collection) {            
+            database.ref(collection.key).orderByChild("rating").limitToLast(4).on("value", function(snaphot) {
+                snaphot.forEach(function (data) {
+                    if (data.key == "Users") {
+                        return;
+                    }
+                    mostRated.push([collection.key, data.key, data.val().rating])
+                });   
+            });            
+        });
+        collections.forEach(function (collection) {            
+            database.ref(collection.key + '/Users').orderByChild("rating").limitToLast(4).on("value", function(snaphot) {
+                snaphot.forEach(function (data) {
+                    mostRatedUsers.push([collection.key, data.key, data.val().rating])
+                });   
+            });            
+        });
+        mostRated.sort((prev, next) => {
+            if (prev[2] < next[2]) {
+                return 1;
+            }
+            if (prev[2] > next[2]) {
+                return -1;
+            }
+            return 0;
+        })
+        mostRatedUsers.sort((prev, next) => {
+            if (prev[2] < next[2]) {
+                return 1;
+            }
+            if (prev[2] > next[2]) {
+                return -1;
+            }
+            return 0;
+        })
+        console.log(mostRated);
+        console.log(mostRatedUsers);
+        let fourMostRated = [],
+            fourMostRatedUsers = [];
+        for (let i = 0; i < 4; i++) {
+            fourMostRated.push(mostRated[i]);
+            fourMostRatedUsers.push(mostRatedUsers[i]);
+        }
+        singleCollection.then(itemHtml => {
+            let finalHtml = ""
+            fourMostRated.forEach((item) => {
+                database.ref(item[0] + '/' + item[1]).on("value", function (snapshot) {
+                    let html = itemHtml;
+                    html = insertProperty(html, 'tea_name', item[1]);
+                    html = insertProperty(html, 'id_tea_name', item[1].replace(' ', ''));
+                    html = insertProperty(html, 'name', item[0]);
+                    html = insertProperty(html, 'cost', snapshot.val().cost);
+                    database.ref(item[0] + '/' + item[1] + '/reviews').on("value", function(reviews) {
+                        let markCount = reviews.numChildren();
+                        if (markCount) {
+                            html = insertProperty(html, 'count', markCount);
+                        }
+                        else {
+                            html = insertProperty(html, 'count', 0);
+                        }
+                    });
+                    
+                    finalHtml += html;
+                });
+            });
+            
+            let targetElem = document.querySelector('#most-rated-our');
+            targetElem.insertAdjacentHTML('beforeend', finalHtml);
+            fourMostRated.forEach((item) => {
+                database.ref(item[0] + '/' + item[1]).on("value", function (snapshot) {
+                    let stars = document.querySelectorAll('#' + item[1].replace(' ', '') + ' span');
+                    showRating(item[0], item[1], stars) 
+                });
+            });
+                   
+        });
+        userSingleCollection.then(itemHtml => {
+            let finalHtml = ""
+            fourMostRatedUsers.forEach((item) => {
+                database.ref(item[0] + '/Users/' + item[1]).on("value", function (snapshot) {
+                    let html = itemHtml;
+                    html = insertProperty(html, 'tea_name', item[1]);
+                    html = insertProperty(html, 'id_tea_name', item[1].replace(' ', ''));
+                    html = insertProperty(html, 'name', item[0]);
+                    html = insertProperty(html, 'cost', snapshot.val().cost);
+                    html = insertProperty(html, 'img_url', snapshot.val().link);
+                    database.ref(item[0] + '/Users/' + item[1] + '/reviews').on("value", function(reviews) {
+                        let markCount = reviews.numChildren();
+                        if (markCount) {
+                            html = insertProperty(html, 'count', markCount);
+                        }
+                        else {
+                            html = insertProperty(html, 'count', 0);
+                        }
+                    });                    
+                    finalHtml += html;
+                });
+            });
+            let targetElem = document.querySelector('#most-rated-users');
+            targetElem.insertAdjacentHTML('beforeend', finalHtml);
+            fourMostRatedUsers.forEach((item) => {
+                database.ref(item[0] + '/Users/' + item[1]).on("value", function (snapshot) {
+                    let stars = document.querySelectorAll('#' + item[1].replace(' ', '') + ' span');
+                    showRating(item[0], item[1], stars, "Users") 
+                });
+            });    
+        });
+
+    });
+}
 
 const loadCollections = (dataHtml, content, title) => {
     database.ref('collections').on("value", function (snapshot) {
@@ -64,7 +176,7 @@ const loadCollections = (dataHtml, content, title) => {
             finalHtml += "<article class='row'>";
             snapshot.forEach(function (data) {
                 let html = dataHtml;
-                let name = data.val().name;
+                let name = data.key;
                 let img_name = data.val().img_name;
                 html = insertProperty(html, 'name', name);
                 html = insertProperty(html, 'img_name', img_name);
@@ -88,6 +200,7 @@ const loadSingleCollection = (dataHtml, content, name, title) => {
                 }
                 let html = dataHtml;
                 html = insertProperty(html, 'tea_name', data.key);
+                html = insertProperty(html, 'id_tea_name', data.key.replace(' ', ''));
                 html = insertProperty(html, 'name', name);
                 html = insertProperty(html, 'cost', data.val().cost);
                 database.ref(name + '/' + data.key + '/reviews').on("value", function(reviews) {
@@ -108,7 +221,8 @@ const loadSingleCollection = (dataHtml, content, name, title) => {
                 if (data.key == "Users") {
                     return   
                 }
-                let stars = document.querySelectorAll('#' + data.key + ' span');
+                console.log('data:' + data.key)
+                let stars = document.querySelectorAll('#' + data.key.replace(' ', '') + ' span');
                 showRating(name, data.key, stars) 
             });            
                 
@@ -142,7 +256,8 @@ const loadUserSingleColleciton = (dataHtml, content,  name, title) => {
             finalHtml += '</article>';
             content.innerHTML = finalHtml;
             snapshot.forEach(function (data) {
-                let stars = document.querySelectorAll('#' + data.key + ' span');
+                let tea = data.key.replace(' ', '')
+                let stars = document.querySelectorAll('#' + data.key.replace(' ', '') + ' span');
                 showRating(name, data.key, stars, "Users") 
             });
         });
@@ -266,6 +381,9 @@ const parseURL = () => {
         request.collection = r[2];
         request.tea = r[3];
     }
+    if (request.tea && request.tea.includes('%20')) {
+        request.tea = request.tea.replace('%20', ' ');
+    }
     console.log('r:' + r)
 
 
@@ -276,6 +394,9 @@ const parseURL = () => {
 const showRating = (name, teaName, stars, users) => {
     let dbRef = (users ? database.ref(name + '/Users/' + teaName + '/reviews') : 
                 database.ref(name + '/' + teaName + '/reviews'));
+    let dbRefRate = (users ? database.ref(name + '/Users/' + teaName) : 
+                database.ref(name + '/' + teaName));   
+    console.log('name:' + teaName)         
     dbRef.on("value", function (snapshot) {
         let sumRating = 0,
             markCount = snapshot.numChildren();
@@ -283,6 +404,10 @@ const showRating = (name, teaName, stars, users) => {
             sumRating += parseInt(data.val().rating);
         });
         sumRating /= markCount;
+        dbRefRate.update({
+            rating: sumRating
+        });
+        
         
         for (let i = 0; i < stars.length; i++) {
             if (sumRating >= i + 0.5) {
@@ -340,13 +465,17 @@ const loadPage = () => {
     console.log('coll:' + request.collection + ', tea:' + request.tea + ', res:' + request.resource)
     let parsedURL = (request.resource ? '/' + request.resource : '/') +
         (request.resource == 'search' ? '?tea={{search_tea}}&collection={{name}}' : (request.collection ? '/{{name}}' : '') +
-            (request.tea ? '/{{tea_name}}' : ''));
+        (request.tea ? '/{{tea_name}}' : ''));
     let stars;
     console.log('parsedURL:' + parsedURL)
     if (parsedURL in routes) {
         showLoading('#main-content')
         routes[parsedURL].then(dataHtml => {
             switch (parsedURL) {
+                case '/home':
+                    content.innerHTML = dataHtml;
+                    loadHome(dataHtml);
+                    break;
                 case '/collections':
                     loadCollections(dataHtml, content, collectionsTitle);
                     break;
@@ -498,13 +627,24 @@ const onNavigate = (pathname) => {
         window.location.origin + pathname
     );
     loadPage();
+    console.log('path:' + window.location.hash)
 }
 
 window.onpopstate = () => {
     loadPage();
 }
 
+window.onload = () => {
+    // onNavigate('#/home');
+    // return false;
+}
+
 window.onbeforeunload = () => {
+    window.history.pushState(
+        {},
+        {},
+        window.location.hash
+    );
     loadPage();
 }
 
@@ -525,5 +665,9 @@ const showLoading = (selector) => {
     insertHtml(selector, html)
 }
 
-showLoading("#main-content");
-onNavigate('#/home');
+showLoading("#main-content");   
+//onNavigate('#/home');
+document.addEventListener("DOMContentLoaded", () => {
+    onNavigate('#/home');
+    return false;
+});
