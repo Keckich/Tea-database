@@ -40,6 +40,7 @@ let home = asyncCall(homeHtml),
 
 
 const routes = {
+    '/': home,
     '/home': home,
     // '/about' : about,
     '/collections': collections,
@@ -53,263 +54,164 @@ const routes = {
     '/add': addTea
 };
 
-
-const loadHome = () => {
-    database.ref('collections').on("value", function (collections) { 
-        let mostRated = [],
-            mostRatedUsers = [];  
-        collections.forEach(function (collection) {            
-            database.ref(collection.key).orderByChild("rating").limitToLast(4).on("value", function(snaphot) {
-                snaphot.forEach(function (data) {
-                    if (data.key == "Users") {
-                        return;
-                    }
-                    mostRated.push([collection.key, data.key, data.val().rating])
-                });   
-            });            
-        });
-        collections.forEach(function (collection) {            
-            database.ref(collection.key + '/Users').orderByChild("rating").limitToLast(4).on("value", function(snaphot) {
-                snaphot.forEach(function (data) {
-                    mostRatedUsers.push([collection.key, data.key, data.val().rating])
-                });   
-            });            
-        });
-        mostRated.sort((prev, next) => {
-            if (prev[2] < next[2]) {
-                return 1;
+const loadHomeTea = (htmlPromise, selector, fourMostRated, users) => {
+    htmlPromise.then(async (itemHtml) => {
+        let finalHtml = "";
+        for (let item of fourMostRated) {
+            let tea = await getTea(item[1], item[0], users);
+            let html = itemHtml;
+            html = insertProperty(html, 'tea_name', item[0]);
+            html = insertProperty(html, 'id_tea_name', item[0].replace(' ', ''));
+            html = insertProperty(html, 'name', item[1]);
+            html = insertProperty(html, 'cost', tea.cost);
+            let markCount;
+            if (users) {
+                html = insertProperty(html, 'img_url', tea.link);
             }
-            if (prev[2] > next[2]) {
-                return -1;
-            }
-            return 0;
-        })
-        mostRatedUsers.sort((prev, next) => {
-            if (prev[2] < next[2]) {
-                return 1;
-            }
-            if (prev[2] > next[2]) {
-                return -1;
-            }
-            return 0;
-        })
-        console.log(mostRated);
-        console.log(mostRatedUsers);
-        let fourMostRated = [],
-            fourMostRatedUsers = [];
-        for (let i = 0; i < 4; i++) {
-            fourMostRated.push(mostRated[i]);
-            fourMostRatedUsers.push(mostRatedUsers[i]);
-        }
-        singleCollection.then(itemHtml => {
-            let finalHtml = ""
-            fourMostRated.forEach((item) => {
-                database.ref(item[0] + '/' + item[1]).on("value", function (snapshot) {
-                    let html = itemHtml;
-                    html = insertProperty(html, 'tea_name', item[1]);
-                    html = insertProperty(html, 'id_tea_name', item[1].replace(' ', ''));
-                    html = insertProperty(html, 'name', item[0]);
-                    html = insertProperty(html, 'cost', snapshot.val().cost);
-                    database.ref(item[0] + '/' + item[1] + '/reviews').on("value", function(reviews) {
-                        let markCount = reviews.numChildren();
-                        if (markCount) {
-                            html = insertProperty(html, 'count', markCount);
-                        }
-                        else {
-                            html = insertProperty(html, 'count', 0);
-                        }
-                    });
-                    
-                    finalHtml += html;
-                });
-            });
-            
-            let targetElem = document.querySelector('#most-rated-our');
-            targetElem.insertAdjacentHTML('beforeend', finalHtml);
-            fourMostRated.forEach((item) => {
-                database.ref(item[0] + '/' + item[1]).on("value", function (snapshot) {
-                    let stars = document.querySelectorAll('#' + item[1].replace(' ', '') + ' span');
-                    showRating(item[0], item[1], stars) 
-                });
-            });
-                   
-        });
-        userSingleCollection.then(itemHtml => {
-            let finalHtml = ""
-            fourMostRatedUsers.forEach((item) => {
-                database.ref(item[0] + '/Users/' + item[1]).on("value", function (snapshot) {
-                    let html = itemHtml;
-                    html = insertProperty(html, 'tea_name', item[1]);
-                    html = insertProperty(html, 'id_tea_name', item[1].replace(' ', ''));
-                    html = insertProperty(html, 'name', item[0]);
-                    html = insertProperty(html, 'cost', snapshot.val().cost);
-                    html = insertProperty(html, 'img_url', snapshot.val().link);
-                    database.ref(item[0] + '/Users/' + item[1] + '/reviews').on("value", function(reviews) {
-                        let markCount = reviews.numChildren();
-                        if (markCount) {
-                            html = insertProperty(html, 'count', markCount);
-                        }
-                        else {
-                            html = insertProperty(html, 'count', 0);
-                        }
-                    });                    
-                    finalHtml += html;
-                });
-            });
-            let targetElem = document.querySelector('#most-rated-users');
-            targetElem.insertAdjacentHTML('beforeend', finalHtml);
-            fourMostRatedUsers.forEach((item) => {
-                database.ref(item[0] + '/Users/' + item[1]).on("value", function (snapshot) {
-                    let stars = document.querySelectorAll('#' + item[1].replace(' ', '') + ' span');
-                    showRating(item[0], item[1], stars, "Users") 
-                });
-            });    
-        });
-
-    });
-}
-
-const loadCollections = (dataHtml, content, title) => {
-    database.ref('collections').on("value", function (snapshot) {
-        title.then(titleHtml => {
-            let finalHtml = titleHtml;
-            finalHtml += "<article class='row'>";
-            snapshot.forEach(function (data) {
-                let html = dataHtml;
-                let name = data.key;
-                let img_name = data.val().img_name;
-                html = insertProperty(html, 'name', name);
-                html = insertProperty(html, 'img_name', img_name);
-                finalHtml += html;
-            });
-            finalHtml += '</article>';
-            content.innerHTML = finalHtml;
-        });
-    });
-}
-
-const loadSingleCollection = (dataHtml, content, name, title) => {
-    database.ref(name).on("value", function (snapshot) {
-        title.then(titleHtml => {
-            let finalHtml = titleHtml;
-            finalHtml = insertProperty(finalHtml, 'name', name);
-            finalHtml += "<article class='row'>";
-            snapshot.forEach(function (data) {
-                if (data.key == "Users") {
-                    return   
-                }
-                let html = dataHtml;
-                html = insertProperty(html, 'tea_name', data.key);
-                html = insertProperty(html, 'id_tea_name', data.key.replace(' ', ''));
-                html = insertProperty(html, 'name', name);
-                html = insertProperty(html, 'cost', data.val().cost);
-                database.ref(name + '/' + data.key + '/reviews').on("value", function(reviews) {
-                    let markCount = reviews.numChildren();
-                    if (markCount) {
-                        html = insertProperty(html, 'count', markCount);
-                    }
-                    else {
-                        html = insertProperty(html, 'count', 0);
-                    }
-                });
-                
-                finalHtml += html;
-            });
-            finalHtml += '</article>';
-            content.innerHTML = finalHtml;
-            snapshot.forEach(function (data) {
-                if (data.key == "Users") {
-                    return   
-                }
-                console.log('data:' + data.key)
-                let stars = document.querySelectorAll('#' + data.key.replace(' ', '') + ' span');
-                showRating(name, data.key, stars) 
-            });            
-                
-        });
-    });
-}
-
-const loadUserSingleColleciton = (dataHtml, content,  name, title) => {
-    database.ref(name + '/Users').on("value", function (snapshot) {
-        title.then(titleHtml => {
-            let finalHtml = titleHtml;
-            finalHtml = insertProperty(finalHtml, 'name', name);
-            finalHtml += "<article class='row'>";
-            snapshot.forEach(function (data) {
-                let html = dataHtml;
-                html = insertProperty(html, 'tea_name', data.key);
-                html = insertProperty(html, 'name', name);
-                html = insertProperty(html, 'cost', data.val().cost)
-                html = insertProperty(html, 'img_url', data.val().link);
-                database.ref(name + '/Users/' + data.key + '/reviews').on("value", function(reviews) {
-                    let markCount = reviews.numChildren();
-                    if (markCount) {
-                        html = insertProperty(html, 'count', markCount);
-                    }
-                    else {
-                        html = insertProperty(html, 'count', 0);
-                    }
-                });
-                finalHtml += html;
-            });
-            finalHtml += '</article>';
-            content.innerHTML = finalHtml;
-            snapshot.forEach(function (data) {
-                let tea = data.key.replace(' ', '')
-                let stars = document.querySelectorAll('#' + data.key.replace(' ', '') + ' span');
-                showRating(name, data.key, stars, "Users") 
-            });
-        });
-    });
-}
-
-const loadSingleTea = (dataHtml, content, name, teaName) => {
-    database.ref(name + '/' + teaName).on("value", function (snapshot) {
-        let finalHtml = '<article id="single-unit" class="row flex-wrap-space">';
-        finalHtml += dataHtml;
-        finalHtml = insertProperty(finalHtml, 'name', name);
-        finalHtml = insertProperty(finalHtml, 'tea_name', snapshot.key);
-        database.ref(name + '/' + snapshot.key + '/reviews').on("value", function(reviews) {
-            let markCount = reviews.numChildren();
+            markCount = await getReviewCount(item[1], item[0], users);
             if (markCount) {
-                finalHtml = insertProperty(finalHtml, 'count', markCount);
+                html = insertProperty(html, 'count', markCount);
             }
             else {
-                finalHtml = insertProperty(finalHtml, 'count', 0);
+                html = insertProperty(html, 'count', 0);
             }
+            finalHtml += html;
+        }
+        let targetElem = document.querySelector(selector);
+        if (targetElem) targetElem.insertAdjacentHTML('beforeend', finalHtml);
+        fourMostRated.forEach((item) => {
+            let stars = document.querySelectorAll('#' + item[0].replace(' ', '') + ' span');
+            showRating(item[1], item[0], stars, users);
         });
-        finalHtml = insertProperty(finalHtml, 'cost', snapshot.val().cost);
-        finalHtml = insertProperty(finalHtml, 'brand', snapshot.val().brand);
-        finalHtml = insertProperty(finalHtml, 'item_form', snapshot.val().item_form);
-        finalHtml = insertProperty(finalHtml, 'origin', snapshot.val().origin);
-        finalHtml = insertProperty(finalHtml, 'energy', snapshot.val().energy);
-        finalHtml = insertProperty(finalHtml, 'steeping', snapshot.val().steeping);
-        finalHtml = insertProperty(finalHtml, 'temperature', snapshot.val().temperature);
-        finalHtml += '</article>'
+
+    });
+}
+
+const loadHome = async () => {
+    let colls = await getCollections();
+    let mostRated = [], mostRatedUser = [];
+    for (let coll in colls) {
+        for (let item in await getOrderedItems(coll)) {
+            mostRated.push([item, coll, await getRating(coll, item)])
+        }
+        for (let item in await getOrderedItems(coll, "Users")) {
+            mostRatedUser.push([item, coll, await getRating(coll, item, "Users")])
+        }
+    }
+
+    mostRated = sortByRate(mostRated)
+    mostRatedUser = sortByRate(mostRatedUser)
+    let fourMostRated = [], fourMostRatedUsers = [];
+    for (let i = 0; i < 4; i++) {
+        fourMostRated.push(mostRated[i]);
+        fourMostRatedUsers.push(mostRatedUser[i]);
+    }
+    loadHomeTea(singleCollection, '#most-rated-our', fourMostRated);
+    loadHomeTea(userSingleCollection, '#most-rated-users', fourMostRatedUsers, "Users")
+
+}
+
+const loadCollections = async (dataHtml, content, title) => {
+    let colls = await getCollections();
+    title.then(async (titleHtml) => {
+        let finalHtml = titleHtml;
+        finalHtml += "<article class='row'>";
+        for (let coll in colls) {
+            let html = dataHtml;
+            console.log(await getImg(coll));
+            html = insertProperty(html, 'name', coll);
+            html = insertProperty(html, 'img_name', await getImg(coll));
+            finalHtml += html;
+        }
+        finalHtml += '</article>';
         content.innerHTML = finalHtml;
-        let targetElem = document.querySelector('#fact-list');
-        for (let i = 0; i < snapshot.val().facts.length; i++) {
-            let li = document.createElement('li');
-            li.innerHTML = snapshot.val().facts[i];
-            targetElem.appendChild(li)
+    });
+
+}
+
+const loadSingleCollection = async (dataHtml, content, name, title, users) => {
+    let collection = await getCollection(name, users);
+    title.then(async (titleHtml) => {
+        let finalHtml = titleHtml;
+        finalHtml = insertProperty(finalHtml, 'name', name);
+        finalHtml += "<article class='row'>";
+        for (let tea in collection) {
+            if (tea == "Users") {
+                continue;
+            }
+            let html = dataHtml;
+            html = insertProperty(html, 'tea_name', tea);
+            html = insertProperty(html, 'id_tea_name', tea.replace(' ', ''));
+            html = insertProperty(html, 'name', name);
+            html = insertProperty(html, 'cost', await getCost(name, tea, users));
+            if (users) {
+                let singleTea = await getTea(name, tea, users);
+                html = insertProperty(html, 'img_url', singleTea.link);
+            }
+            let markCount = await getReviewCount(name, tea, users);
+            if (markCount) {
+                html = insertProperty(html, 'count', markCount);
+            }
+            else {
+                html = insertProperty(html, 'count', 0);
+            }
+
+            finalHtml += html;
+        }
+        finalHtml += '</article>';
+        content.innerHTML = finalHtml;
+        for (let tea in collection) {
+            if (tea == "Users") {
+                continue;
+            }
+            let stars = document.querySelectorAll('#' + tea.replace(' ', '') + ' span');
+            showRating(name, tea, stars, users);
         }
     });
 }
 
-const loadUserSingleTea = (dataHtml, content, name, teaName) => {
-    database.ref(name + '/Users/' + teaName).on("value", function (snapshot) {
-        let finalHtml = '<article class="row flex-wrap-space">';
-        finalHtml += dataHtml;
-        finalHtml = insertProperty(finalHtml, 'name', name);
-        finalHtml = insertProperty(finalHtml, 'tea_name', snapshot.key);
-        finalHtml = insertProperty(finalHtml, 'cost', snapshot.val().cost);
-        finalHtml = insertProperty(finalHtml, 'img_url', snapshot.val().link);
-        finalHtml = insertProperty(finalHtml, 'place', snapshot.val().place);
-        finalHtml = insertProperty(finalHtml, 'description', snapshot.val().description);
-        finalHtml += '</article>'
-        content.innerHTML = finalHtml;
-    });
+const loadSingleTea = async (dataHtml, content, request, name, teaName, users) => {
+    let tea = await getTea(name, teaName, users);
+    let finalHtml = '<article id="single-unit" class="row flex-wrap-space">';
+    finalHtml += dataHtml;
+    finalHtml = insertProperty(finalHtml, 'name', name);
+    finalHtml = insertProperty(finalHtml, 'tea_name', teaName);
+    let markCount = await getReviewCount(name, teaName, users);
+    if (markCount) {
+        finalHtml = insertProperty(finalHtml, 'count', markCount);
+    }
+    else {
+        finalHtml = insertProperty(finalHtml, 'count', 0);
+    }
+    finalHtml = insertProperty(finalHtml, 'cost', tea.cost);
+    if (users) {
+        finalHtml = insertProperty(finalHtml, 'img_url', tea.link);
+        finalHtml = insertProperty(finalHtml, 'place', tea.place);
+        finalHtml = insertProperty(finalHtml, 'description', tea.description);
+    }
+    else {
+        finalHtml = insertProperty(finalHtml, 'brand', tea.brand);
+        finalHtml = insertProperty(finalHtml, 'item_form', tea.item_form);
+        finalHtml = insertProperty(finalHtml, 'origin', tea.origin);
+        finalHtml = insertProperty(finalHtml, 'energy', tea.energy);
+        finalHtml = insertProperty(finalHtml, 'steeping', tea.steeping);
+        finalHtml = insertProperty(finalHtml, 'temperature', tea.temperature);
+    }
+
+    finalHtml += '</article>'
+    content.innerHTML = finalHtml;
+    if (!users) {
+        let targetElem = document.querySelector('#fact-list');
+        for (let i = 0; i < tea.facts.length; i++) {
+            let li = document.createElement('li');
+            li.innerHTML = tea.facts[i];
+            targetElem.appendChild(li)
+        }
+    }
+    let stars = document.querySelectorAll('.rating-result span');
+    showRating(name, teaName, stars, users);
+    loadReviewSection(request, users);
+    loadAllReviews(name, teaName, users);
 }
 
 const loadReviewSection = (request, users) => {
@@ -324,35 +226,33 @@ const loadReviewSection = (request, users) => {
     })
 }
 
-const loadAllReviews = (name, teaName, users) => {
-    let dbRef = (users ? database.ref(name + '/Users/' + teaName + '/reviews') : 
-                database.ref(name + '/' + teaName + '/reviews'));
-    dbRef.on("value", function (snapshot) {
+const loadAllReviews = async (name, teaName, users) => {
+    let allReviews = await getReviews(name, teaName, users);
+    for (let rev in allReviews) {
+        let single = await getReview(name, teaName, rev, users);
+        console.log('all:' + single.content)
         singleReview.then(dataHtml => {
             let finalHtml = '';
-            snapshot.forEach(function (data) {
-                let html = dataHtml;
-                html = insertProperty(html, 'date', data.val().date);
-                html = insertProperty(html, 'rev_title', data.val().title);
-                html = insertProperty(html, 'rev_content', data.val().content);
-                html = insertProperty(html, 'email', data.val().email);
-                html = insertProperty(html, 'displayName', data.val().username);
-                html = insertProperty(html, 'key', data.key);
-                finalHtml += html;
-            });
+            let html = dataHtml;
+            html = insertProperty(html, 'date', single.date);
+            html = insertProperty(html, 'rev_title', single.title);
+            html = insertProperty(html, 'rev_content', single.content);
+            html = insertProperty(html, 'email', single.email);
+            html = insertProperty(html, 'displayName', single.username);
+            html = insertProperty(html, 'key', rev);
+            finalHtml += html;
             let targetElem = document.querySelector('#input-review-container');
             console.log('final:' + targetElem)
             if (targetElem && finalHtml) {
-                targetElem.insertAdjacentHTML('beforeend', finalHtml);
-                snapshot.forEach(function (data) {
-                    let stars = document.querySelectorAll('#' + data.key + ' .review-rate span')
-                    for (let i = 0; i < data.val().rating; i++) {
-                        stars[i].classList.add('active');
-                    }
-                });
+                targetElem.insertAdjacentHTML('beforeend', finalHtml);                
+                let stars = document.querySelectorAll('#' + rev + ' .review-rate span')
+                for (let i = 0; i < single.rating; i++) {
+                    stars[i].classList.add('active');
+                }                
             }
         });
-    });
+    }
+
 }
 
 const loadSearch = (dataHtml, teaName) => {
@@ -392,11 +292,10 @@ const parseURL = () => {
 }
 
 const showRating = (name, teaName, stars, users) => {
-    let dbRef = (users ? database.ref(name + '/Users/' + teaName + '/reviews') : 
-                database.ref(name + '/' + teaName + '/reviews'));
-    let dbRefRate = (users ? database.ref(name + '/Users/' + teaName) : 
-                database.ref(name + '/' + teaName));   
-    console.log('name:' + teaName)         
+    let dbRef = (users ? database.ref(name + '/Users/' + teaName + '/reviews') :
+        database.ref(name + '/' + teaName + '/reviews'));
+    let dbRefRate = (users ? database.ref(name + '/Users/' + teaName) :
+        database.ref(name + '/' + teaName));
     dbRef.on("value", function (snapshot) {
         let sumRating = 0,
             markCount = snapshot.numChildren();
@@ -407,8 +306,8 @@ const showRating = (name, teaName, stars, users) => {
         dbRefRate.update({
             rating: sumRating
         });
-        
-        
+
+
         for (let i = 0; i < stars.length; i++) {
             if (sumRating >= i + 0.5) {
                 stars[i].classList.add('active');
@@ -440,7 +339,7 @@ const writeReview = (name, teaName, users) => {
         let rate = getReviewRating();
         if ((titleReview && titleReview.value) && (userReview && userReview.value) && rate) {
             console.log('user:' + users);
-            let dbRef = (users=='{{users}}' ? database.ref(name + '/' + teaName + '/reviews') : database.ref(name + '/Users/' + teaName + '/reviews'))
+            let dbRef = (users == '{{users}}' ? database.ref(name + '/' + teaName + '/reviews') : database.ref(name + '/Users/' + teaName + '/reviews'))
             dbRef.push({
                 title: titleReview.value,
                 content: userReview.value,
@@ -465,13 +364,16 @@ const loadPage = () => {
     console.log('coll:' + request.collection + ', tea:' + request.tea + ', res:' + request.resource)
     let parsedURL = (request.resource ? '/' + request.resource : '/') +
         (request.resource == 'search' ? '?tea={{search_tea}}&collection={{name}}' : (request.collection ? '/{{name}}' : '') +
-        (request.tea ? '/{{tea_name}}' : ''));
-    let stars;
+            (request.tea ? '/{{tea_name}}' : ''));
     console.log('parsedURL:' + parsedURL)
     if (parsedURL in routes) {
         showLoading('#main-content')
         routes[parsedURL].then(dataHtml => {
             switch (parsedURL) {
+                case '/':
+                    content.innerHTML = dataHtml;
+                    loadHome(dataHtml);
+                    break;
                 case '/home':
                     content.innerHTML = dataHtml;
                     loadHome(dataHtml);
@@ -486,21 +388,13 @@ const loadPage = () => {
                     loadSingleCollection(dataHtml, content, request.collection, singleCollectionTitle);
                     break;
                 case '/users-tea/{{name}}':
-                    loadUserSingleColleciton(dataHtml, content, request.collection, singleCollectionTitle);
+                    loadSingleCollection(dataHtml, content, request.collection, singleCollectionTitle, "Users");
                     break;
                 case '/collections/{{name}}/{{tea_name}}':
-                    loadSingleTea(dataHtml, content, request.collection, request.tea);
-                    stars = document.querySelectorAll('.rating-result span');
-                    showRating(request.collection, request.tea, stars);
-                    loadReviewSection(request);
-                    loadAllReviews(request.collection, request.tea);
+                    loadSingleTea(dataHtml, content, request, request.collection, request.tea);
                     break;
                 case '/users-tea/{{name}}/{{tea_name}}':
-                    loadUserSingleTea(dataHtml, content, request.collection, request.tea);
-                    stars = document.querySelectorAll('.rating-result span');
-                    showRating(request.collection, request.tea, stars, 'Users');
-                    loadReviewSection(request, 'Users');
-                    loadAllReviews(request.collection, request.tea, 'Users');
+                    loadSingleTea(dataHtml, content, request, request.collection, request.tea, "Users");
                     break;
                 case '/search?tea={{search_tea}}&collection={{name}}':
                     console.log('WE R HERE')
@@ -515,15 +409,15 @@ const loadPage = () => {
 }
 
 const getSearchedItems = (inputCollection, teaText, urn, htmlPromise, users) => {
-    database.ref(urn).on("value", function (snapshot) {        
+    database.ref(urn).on("value", function (snapshot) {
         let finalHtml = "";
         let matches = [];
-        htmlPromise.then(dataHtml => {             
+        htmlPromise.then(dataHtml => {
             snapshot.forEach(function (data) {
                 let teaNameLow = data.key.toLowerCase();
                 if (data.key == "Users") {
                     return
-                }                
+                }
                 if (teaNameLow.includes(teaText) || teaText.includes(teaNameLow)) {
                     let html = dataHtml;
                     html = insertProperty(html, 'tea_name', data.key);
@@ -542,7 +436,7 @@ const getSearchedItems = (inputCollection, teaText, urn, htmlPromise, users) => 
             console.log(finalHtml)
             let targetElem = document.querySelector('#search-res');
             targetElem.insertAdjacentHTML('afterbegin', finalHtml);
-            
+
         });
     });
 }
@@ -561,7 +455,7 @@ const searchTea = () => {
     }
     onNavigate('#/search?tea=' + teaText + '&collection=' + inputCollection);
     getSearchedItems(inputCollection, teaText, inputCollection, singleCollection);
-    getSearchedItems(inputCollection, teaText, inputCollection + '/Users', userSingleCollection, 'Users');    
+    getSearchedItems(inputCollection, teaText, inputCollection + '/Users', userSingleCollection, 'Users');
 }
 
 let files = []
@@ -588,7 +482,7 @@ const addNewTea = () => {
     if ((teaName && teaName.value) && (teaPrice && teaPrice.value) &&
         (teaDescription && teaDescription.value)) {
         let imgUrl = '';
-        let uploadTask;   
+        let uploadTask;
         database.ref(teaColl.value + '/Users/' + teaName.value).set({
             cost: teaPrice.value,
             place: teaPlace.value,
@@ -599,7 +493,7 @@ const addNewTea = () => {
         });
         console.log('photo:' + files[0])
         if (files[0]) {
-            uploadTask = firebase.storage().ref('images/' + user.uid + '/' + teaName.value).put(files[0]);            
+            uploadTask = firebase.storage().ref('images/' + user.uid + '/' + teaName.value).put(files[0]);
             uploadTask.on('state_changed', function () {
                 uploadTask.snapshot.ref.getDownloadURL().then(function (url) {
                     imgUrl = url;
@@ -609,7 +503,7 @@ const addNewTea = () => {
                 });
             });
         }
-        alert("Success!");        
+        alert("Success!");
     }
     else {
         alert("Please, fill in name, price and description.")
@@ -632,11 +526,6 @@ const onNavigate = (pathname) => {
 
 window.onpopstate = () => {
     loadPage();
-}
-
-window.onload = () => {
-    // onNavigate('#/home');
-    // return false;
 }
 
 window.onbeforeunload = () => {
@@ -665,9 +554,6 @@ const showLoading = (selector) => {
     insertHtml(selector, html)
 }
 
-showLoading("#main-content");   
-//onNavigate('#/home');
-document.addEventListener("DOMContentLoaded", () => {
-    onNavigate('#/home');
-    return false;
-});
+showLoading("#main-content");
+onNavigate('#/home');
+
