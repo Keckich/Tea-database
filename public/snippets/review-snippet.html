@@ -1,7 +1,7 @@
 <article id="input-review-container">
     <section>
         <h2>Reviews</h2>
-        <form id="review-form">
+        <form id="review-form" onsubmit="writeReview('{{name}}', '{{tea_name}}', '{{users}}');">
             <div class="rating-area review-label">
                 <label>Rating:</label>
                 <input type="radio" id="star-5" name="rating" value="5">
@@ -27,7 +27,7 @@
                 <label>Review:</label>
                 <textarea id="review-input" class="review-input" rows="4" placeholder="Leave your review here..."></textarea>
             </div>
-            <input  id="leave-review" value="Send" class="submit-btn" onclick="writeReview('{{name}}', '{{tea_name}}', '{{users}}');">
+            <button  id="leave-review" value="Send" class="submit-btn">Send</button>
         </form>
     </section>
 </article>

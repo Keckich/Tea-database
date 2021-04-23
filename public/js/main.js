@@ -408,7 +408,7 @@ const loadPage = () => {
     }
 }
 
-const getSearchedItems = (inputCollection, teaText, urn, htmlPromise, users) => {
+const getSearchedItems = async(inputCollection, teaText, urn, htmlPromise, users) => {
     database.ref(urn).on("value", function (snapshot) {
         let finalHtml = "";
         let matches = [];
@@ -433,12 +433,13 @@ const getSearchedItems = (inputCollection, teaText, urn, htmlPromise, users) => 
                 let targetElem = (users ? document.querySelector('#no-matches-users') : document.querySelector('#no-matches-our'));
                 targetElem.style.display = "block";
             }
-            console.log(finalHtml)
+            //console.log(finalHtml)
             let targetElem = document.querySelector('#search-res');
             targetElem.insertAdjacentHTML('afterbegin', finalHtml);
 
         });
     });
+    
 }
 
 const searchTea = () => {
@@ -555,5 +556,5 @@ const showLoading = (selector) => {
 }
 
 showLoading("#main-content");
-onNavigate('#/home');
+onNavigate(window.location.hash);
 

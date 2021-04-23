@@ -1,8 +1,8 @@
 body {
 	margin: 0;
 	font-family: 'Kavivanar', cursive;
-	background-color: #61122f;
-	color: white;
+	background-color: var(--primary-color);
+	color: var(--font-color);
 }
 
 textarea {
@@ -11,11 +11,11 @@ textarea {
 }
 
 header {
-	background-color: #f6b319;
+	background-color: var(--secondary-color);
 }
 
 #header-nav {
-	background-color: #f6b319;
+	background-color: var(--secondary-color);
 }
 
 #header-title h1 {
@@ -36,17 +36,17 @@ header {
 	text-decoration: none;
 }
 .navbar-title h1 {
-	color: #557c3e;
+	color: #1E2022;
 	font-size: 1.5em;
 	text-transform: uppercase;
 	font-weight: bold;
-	text-shadow: 1px 1px 1px #222;
+	text-shadow: 1px 1px 1px var(--primary-color);
 	margin-top: 0;
 	margin-bottom: 0;
 }
 .navbar-title p {
 	font-family: 'Dancing Script', cursive;
-	color: #951C49;
+	color: var(--font-color);
 	font-size: 0.9em;
 	margin-top: 5px;
 	text-align: center;
@@ -63,12 +63,12 @@ header {
 	padding: 10px;
 }
 #nav-list a {
-	color: #951C49;
+	color: var(--font-color);
 	text-align: center;
 	text-decoration: none;
 }
 #nav-list li:hover {
-	background: #E7E7E7;
+	background: var(--primary-color);
 }	
 
 .account-btn {
@@ -76,21 +76,21 @@ header {
 	margin-bottom: auto;
 	font-size: 1.5em;
 	font-family: 'Kavivanar', cursive;
-	color: #951C49;
+	color: var(--shadow-color);
 	text-align: center;
 	text-decoration: none;
-    background-color: white;
+    background-color: var(--primary-color);
     border: 0;
 	border-radius: 8px;
-    box-shadow: 0px 5px 10px;
+    box-shadow: 0px 5px 10px #1E2022; 
     transition: all .3s;
 	outline: none;
-	width: 45%;
+	width: 30%;
 }
 .account-btn:hover {
 	cursor: pointer;
-	background-color: #E7E7E7;
-	box-shadow: 0px 15px 25px -5px;
+	background-color: var(--border-color);
+	box-shadow: 0px 15px 25px -5px #1E2022;
 	transform: scale(1.03);
 }
 .account-btn:active {
@@ -103,6 +103,7 @@ header {
   font-family:  'Kavivanar', cursive;
   border-radius: 8px;
   outline: none;
+  width: 85%;
 }
 .collection-select {
 	margin: auto 3px auto 0; 
@@ -122,7 +123,8 @@ header {
 }
 
 .most-rated-section {
-	background: #9B627E;
+	background: var(--secondary-color);
+	color: var(--font-color);
     border-radius: 8px;
     padding: 10px;
     margin: 10px 10px 50px;
@@ -164,7 +166,7 @@ header {
 }
 .navbar-toggle:hover {
 	cursor: pointer;
-  background-color: white;	
+  background-color: var(--primary-color);;	
 }
 .navbar-toggle .icon-bar {
   display: block;
@@ -183,9 +185,9 @@ header {
   margin-bottom: 30px;
   border-radius: 5px;
   color: inherit;
-  box-shadow: 0 0 50px #3F0C1F;
-  border: 2px solid #3F0C1F;
-  background-color: #eeeeee;
+  box-shadow: 0 0 50px var(--shadow-color);
+  border: 2px solid var(--shadow-color);
+  background-color: var(--primary-color);
 }
 
 .img-responsive {
@@ -197,10 +199,10 @@ header {
 
 .panel-footer {
   padding: 10px 15px;
-  background-color: #222;
+  background-color: var(--secondary-color);
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
-  color: white;
+  color: var(--font-color);
   margin-top: 60px;
   margin-bottom: 0;
 }
@@ -210,7 +212,7 @@ header {
 	justify-content: center;
 	align-items: center;
 	position: relative;
-	border: 2px solid #3F0C1F;
+	border: 2px solid var(--font-color);
 	overflow: hidden;
 	width: 200px;
 	height: 200px;
@@ -224,8 +226,8 @@ header {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	color: white;
-	background-color: black;
+	color: var(--font-color);;
+	background-color: var(--secondary-color);
 	opacity: .9;
 }
 
@@ -240,21 +242,22 @@ header {
     min-height: 100%;
 }
 .category-tile:hover {
-	box-shadow: 0 1px 5px 1px white;
+	box-shadow: 0 1px 5px 1px var(--font-color);
 }
 
 footer .links a {
-	color: #557c3e;
+	color: var(--font-color);
 	text-decoration: none;
 }
 
 footer .links a:hover {
-	background-color: white;
+	color: var(--secondary-color);
+	background-color: var(--font-color);
 }
 
 #copyright {
 	text-align: center;
-	color: white;
+	color: var(--font-color);
 }
 
 .text-right {
@@ -323,7 +326,7 @@ footer .links a:hover {
 .form-login {
 	width: 450px; 
 	margin: auto;
-	border: 2px solid #E7E7E7; 
+	border: 2px solid var(--border-color);
 	border-radius: 8px;
 }
 .submit-btn {
@@ -331,12 +334,13 @@ footer .links a:hover {
 	font-size: 17px; 
 	height: 40px; 
 	margin: 15px 21px 15px;
-	color: #61122f;
+	color: var(--font-color);
+	background-color: var(--bg-color);
 	font-family: 'Kavivanar', cursive;
 	outline: none;
 }
 .submit-btn:hover {
-	background-color: #f6b319;
+	background-color: #C9D6DF;
 	cursor: pointer;
 }
 .tab {
@@ -346,6 +350,7 @@ footer .links a:hover {
 	margin: 60px auto 0;
     height: 50px;
 }
+
 .tab-link {
 	border: none;
 	outline: none;
@@ -354,15 +359,16 @@ footer .links a:hover {
 	width: 50%;
 	justify-content: space-between; 
 	font-size: 20px;
-	color: #61122f;
+	color: var(--font-color);
+	background-color: var(--primary-color);
 	font-family: 'Kavivanar', cursive;
 }
 .tab-link:hover {
-	background-color: #f6b319;
+	background-color: var(--secondary-color);
 }
 .tab-link.active {
-	background-color: #557c3e;
-	color: #E7E7E7;
+	background-color: var(--border-color);;
+	color: var(--primary-color);
 }
 #register {
 	display: none;
@@ -405,7 +411,7 @@ footer .links a:hover {
 
 /******* Reviews *******/
 #review-form {
-	border: 2px solid #E7E7E7;
+	border: 2px solid var(--border-color);
     border-radius: 8px;
 }
 
@@ -471,7 +477,7 @@ footer .links a:hover {
 	/**** ****/
 
 .single-review {
-	background-color: #85173F;
+	background-color: var(--secondary-color);
 	margin-top: 35px;
     border-radius: 8px;
     padding: 10px;

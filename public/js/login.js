@@ -29,7 +29,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 	  	// User is signed in.
 		btnAdd.style.display = "flex";
 		btnAcc.innerText = "Log out"
-		btnAcc.style.width = '45%';
+		btnAcc.style.width = '30%';
 		btnAcc.onclick = () => {
 			logout();
 		} 
@@ -38,7 +38,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 	  	// No user is signed in.
 		btnAdd.style.display = "none";
 		btnAcc.innerText = "Account";
-		btnAcc.style.width = '100%';
+		btnAcc.style.width = '70%';
 		btnAcc.onclick = () => {
 			onNavigate('#/login');
 			return false;
