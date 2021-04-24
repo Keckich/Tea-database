@@ -306,6 +306,9 @@ const showRating = (name, teaName, stars, users) => {
             sumRating += parseInt(data.val().rating);
         });
         sumRating /= markCount;
+        if (!sumRating) {
+            return
+        }
         dbRefRate.update({
             rating: sumRating
         });
