@@ -1,5 +1,5 @@
 <h2>Add new tea</h2>
-<form id="add-form" style="display: flex; justify-content: space-between;">
+<form id="add-form" class="flex-wrap-space" onsubmit="addNewTea(); return false;">
     <section>
         <div class="review-label">
             <label>Collection:</label>
@@ -15,8 +15,8 @@
             <input id="new-tea-name" type="text" class="review-title">
         </div>
         <div class="review-label">
-            <label>Price:</label>
-            <input id="new-tea-price" type="text" class="review-title">
+            <label>Price ($):</label>
+            <input id="new-tea-price" type="number" min="0" step="0.01" class="review-title">
         </div>
         <div class="review-label">
             <label>Description:</label>
@@ -26,12 +26,11 @@
             <label>Where did you get this tea?</label>
             <input id="new-tea-place" type="text" class="review-title">
         </div>
-        <input  value="Send" class="submit-btn" onclick="addNewTea();">
+        <button class="submit-btn">Send</button>
     </section>
     <section id="add-photo-section">
         <h3>Photo of your tea:</h3>
         <img id="tea-photo" src="1.png">
         <input id="select-img" type="file" onclick="showImg(event);">
-    </section>
-    
+    </section> 
 </form>

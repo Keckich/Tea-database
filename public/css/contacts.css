@@ -1,0 +1,15 @@
+.icon-contact {
+    display: inline-block;
+    font-size: 30px;
+    border: 2px solid;
+    border-radius: 8px;
+    padding: 0 10px;
+    text-align: center;
+    width: 35px;
+    margin-right: 10px;
+	border: 2px solid var(--shadow-color);
+}
+.icon-contact:hover {
+    background-color: var(--secondary-color);
+	transform: scale(1.07);
+}

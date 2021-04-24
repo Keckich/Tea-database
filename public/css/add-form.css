@@ -1,0 +1,9 @@
+#add-photo-section {
+	margin: 0 auto;
+}
+
+#add-photo-section img {
+	display: block; 
+	width: 410px; 
+	height: 410px;
+}

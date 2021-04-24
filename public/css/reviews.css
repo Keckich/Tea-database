@@ -1,0 +1,79 @@
+#review-form {
+	border: 2px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.review-label {
+	font-size: 21px;
+    margin: 10px 21px 30px;
+}
+
+.review-title {
+	font-size: 20px;
+	font-family: 'Kavivanar', cursive;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 8px;
+    outline: none;
+}
+
+.review-input {
+	display: block;
+	width: 100%;
+    box-sizing: border-box;
+    font-size: 20px;
+	font-family: 'Kavivanar', cursive;
+	border-radius: 8px;
+}
+
+/**** Stars ****/
+.rating-area {
+	width: 160px;
+}
+.rating-area:not(:checked) > input {
+	display: none;
+}
+.rating-area:not(:checked) .star-icon {
+	float: right;
+	cursor: pointer;
+	font-size: 21px;
+	color: lightgray;
+	text-shadow: 1px 1px #bbb;
+}
+.rating-area:not(:checked) .star-icon:before {
+	content: '★';
+}
+.rating-area > input:checked ~ .star-icon {
+	color: gold;
+	text-shadow: 1px 1px #c60;
+}
+.rating-area:not(:checked) > .star-icon:hover,
+.rating-area:not(:checked) > .star-icon:hover ~ .star-icon {
+	color: gold;
+}
+.rating-area > input:checked + .star-icon:hover,
+.rating-area > input:checked + .star-icon:hover ~ .star-icon,
+.rating-area > input:checked ~ .star-icon:hover,
+.rating-area > input:checked ~ .star-icon:hover ~ .star-icon,
+.rating-area > .star-icon:hover ~ input:checked ~ .star-icon {
+	color: gold;
+	text-shadow: 1px 1px goldenrod;
+}
+.rate-area > .star-icon:active {
+	position: relative;
+}
+/**** ****/
+
+.single-review {
+	background-color: var(--secondary-color);
+	margin-top: 35px;
+    border-radius: 8px;
+    padding: 10px;
+}
+.review-name {
+	display: block;
+    margin: 3px 0 15px;
+}
+.review-title {
+	font-size: 1.4em;
+}

@@ -1,0 +1,24 @@
+.panel-footer {
+	padding: 10px 15px;
+	background-color: var(--secondary-color);
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	color: var(--font-color);
+	margin-top: 60px;
+	margin-bottom: 0;
+}
+footer .links a {
+	color: var(--font-color);
+	text-decoration: none;
+}
+footer .links a:hover {
+	color: var(--secondary-color);
+	background-color: var(--font-color);
+}
+#copyright {
+	text-align: center;
+	color: var(--font-color);
+}
+#comming-img {
+	border: 2px solid #1E2022;
+}

@@ -2,7 +2,7 @@
     <button id="log-in-tab" class="tab-link active" onclick="openTab(event, 'log-in');">LogIn</button>
     <button id="register-tab" class="tab-link" onclick="openTab(event, 'register');">Register</button>
 </div>
-<form id="log-in" class="form-login" >
+<form id="log-in" class="form-login" onsubmit="login(); return false;">
     <div class="field-container" >
         <label class="label-login">Email:</label>
         <input type="text" id="email-login" class="input-login">
@@ -11,10 +11,10 @@
         <label class="label-login">Password:</label>
         <input type="password" id="password-login" class="input-login">
     </div>
-    <input  value="Log In" class="submit-btn" onclick="login();">
+    <button class="submit-btn">Log In</button>
 </form><!-- LogIn end -->
 
-<form id="register" class="form-login" >
+<form id="register" class="form-login" onsubmit="register(); return false;">
     <div class="field-container" >
         <label class="label-login">Email:</label>
         <input type="text" id="email-reg" class="input-login">
@@ -30,7 +30,8 @@
     </div>
     <div class="field-container">
         <label class="label-login">Repeat password:</label>
-        <input type="password" id="rep-password" class="input-login">
+        <input type="password" id="password-rep" class="input-login">
+        <span id="password-match" style="display: none;">Paswords do not match.</span>
     </div>
-    <input  value="Register" class="submit-btn" onclick="register();">
+    <button class="submit-btn">Register</button>
 </form><!-- Register end -->

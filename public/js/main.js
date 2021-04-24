@@ -1,4 +1,5 @@
-let homeHtml = "/snippets/home-snippet.html",
+const homeHtml = "/snippets/home-snippet.html",
+    contactsHtml = "/snippets/contacts.html"
     collectionsHtml = "/snippets/coll-snippet.html",
     collectionsTitleHtml = "/snippets/coll-title-snippet.html",
     singleCollectionHtml = "/snippets/single-coll-snippet.html",
@@ -14,34 +15,36 @@ let homeHtml = "/snippets/home-snippet.html",
     userSingleItemHtml = "snippets/single-user-item-snippet.html";
 
 let content = document.getElementById('main-content');
-asyncCall = (fileUrl) => fetch(fileUrl)
+loadHtmlAsync = (fileUrl) => fetch(fileUrl)
     .then(response => response.text());
 
-// const asyncCall = async(page) => {
+// const loadHtmlAsync = async(page) => {
 //     const response = await fetch(page);
 //     const resHtml = await response.text();
 //     return resHtml;
 // }
 
-let home = asyncCall(homeHtml),
-    collections = asyncCall(collectionsHtml),
-    collectionsTitle = asyncCall(collectionsTitleHtml),
-    singleCollection = asyncCall(singleCollectionHtml),
-    singleCollectionTitle = asyncCall(singleCollectionTitleHtml),
-    singleTea = asyncCall(singleItemHtml),
-    logIn = asyncCall(loginHtml),
-    review = asyncCall(reviewHtml),
-    singleReview = asyncCall(singleReviewHtml),
-    search = asyncCall(searchHtml),
-    addTea = asyncCall(addHtml),
-    userCollections = asyncCall(userCollHtml),
-    userSingleCollection = asyncCall(userSingleCollHtml),
-    userSingleItem = asyncCall(userSingleItemHtml);
+const home = loadHtmlAsync(homeHtml),
+    contacts = loadHtmlAsync(contactsHtml),
+    collections = loadHtmlAsync(collectionsHtml),
+    collectionsTitle = loadHtmlAsync(collectionsTitleHtml),
+    singleCollection = loadHtmlAsync(singleCollectionHtml),
+    singleCollectionTitle = loadHtmlAsync(singleCollectionTitleHtml),
+    singleTea = loadHtmlAsync(singleItemHtml),
+    logIn = loadHtmlAsync(loginHtml),
+    review = loadHtmlAsync(reviewHtml),
+    singleReview = loadHtmlAsync(singleReviewHtml),
+    search = loadHtmlAsync(searchHtml),
+    addTea = loadHtmlAsync(addHtml),
+    userCollections = loadHtmlAsync(userCollHtml),
+    userSingleCollection = loadHtmlAsync(userSingleCollHtml),
+    userSingleItem = loadHtmlAsync(userSingleItemHtml);
 
 
 const routes = {
     '/': home,
     '/home': home,
+    '/contacts': contacts,
     // '/about' : about,
     '/collections': collections,
     '/collections/{{name}}': singleCollection,
@@ -244,11 +247,11 @@ const loadAllReviews = async (name, teaName, users) => {
             let targetElem = document.querySelector('#input-review-container');
             console.log('final:' + targetElem)
             if (targetElem && finalHtml) {
-                targetElem.insertAdjacentHTML('beforeend', finalHtml);                
+                targetElem.insertAdjacentHTML('beforeend', finalHtml);
                 let stars = document.querySelectorAll('#' + rev + ' .review-rate span')
                 for (let i = 0; i < single.rating; i++) {
                     stars[i].classList.add('active');
-                }                
+                }
             }
         });
     }
@@ -408,38 +411,52 @@ const loadPage = () => {
     }
 }
 
-const getSearchedItems = async(inputCollection, teaText, urn, htmlPromise, users) => {
-    database.ref(urn).on("value", function (snapshot) {
-        let finalHtml = "";
-        let matches = [];
-        htmlPromise.then(dataHtml => {
-            snapshot.forEach(function (data) {
-                let teaNameLow = data.key.toLowerCase();
-                if (data.key == "Users") {
-                    return
-                }
-                if (teaNameLow.includes(teaText) || teaText.includes(teaNameLow)) {
-                    let html = dataHtml;
-                    html = insertProperty(html, 'tea_name', data.key);
-                    html = insertProperty(html, 'name', inputCollection);
-                    if (users) {
-                        html = insertProperty(html, 'img_url', data.val().link);
-                    }
-                    finalHtml += html;
-                    matches.push(teaNameLow);
-                }
-            });
-            if (matches.length == 0) {
-                let targetElem = (users ? document.querySelector('#no-matches-users') : document.querySelector('#no-matches-our'));
-                targetElem.style.display = "block";
+const getSearchedItems = async (inputCollection, teaText, htmlPromise, users) => {
+    let collection = await getCollection(inputCollection, users);
+    let finalHtml = "";
+    let matches = [];
+    htmlPromise.then(async (dataHtml) => {
+        for (let tea in collection) {
+            if (tea == "Users") {
+                continue;
             }
-            //console.log(finalHtml)
-            let targetElem = document.querySelector('#search-res');
-            targetElem.insertAdjacentHTML('afterbegin', finalHtml);
-
-        });
+            let teaNameLow = tea.toLowerCase();
+            if (teaNameLow.includes(teaText) || teaText.includes(teaNameLow)) {
+                let html = dataHtml;
+                html = insertProperty(html, 'tea_name', tea);
+                html = insertProperty(html, 'id_tea_name', tea.replace(' ', ''));
+                html = insertProperty(html, 'name', inputCollection);
+                html = insertProperty(html, 'cost', await getCost(inputCollection, tea, users));
+                if (users) {
+                    let singleTea = await getTea(inputCollection, tea, users);
+                    html = insertProperty(html, 'img_url', singleTea.link);
+                }
+                let markCount = await getReviewCount(inputCollection, tea, users);
+                if (markCount) {
+                    html = insertProperty(html, 'count', markCount);
+                }
+                else {
+                    html = insertProperty(html, 'count', 0);
+                }            
+                finalHtml += html;
+                matches.push(teaNameLow);
+            }
+        }
+        if (matches.length == 0) {
+            let targetElem = (users ? document.querySelector('#no-matches-users') : document.querySelector('#no-matches-our'));
+            targetElem.style.display = "block";
+        }
+        let targetElem = document.querySelector('#search-res');
+        targetElem.insertAdjacentHTML('afterbegin', finalHtml);
+        for (let tea in collection) {
+            if (tea == "Users") {
+                continue;
+            }
+            let stars = document.querySelectorAll('#' + tea.replace(' ', '') + ' span');
+            showRating(inputCollection, tea, stars, users);
+        }
     });
-    
+
 }
 
 const searchTea = () => {
@@ -455,8 +472,8 @@ const searchTea = () => {
         return;
     }
     onNavigate('#/search?tea=' + teaText + '&collection=' + inputCollection);
-    getSearchedItems(inputCollection, teaText, inputCollection, singleCollection);
-    getSearchedItems(inputCollection, teaText, inputCollection + '/Users', userSingleCollection, 'Users');
+    getSearchedItems(inputCollection, teaText, singleCollection);
+    getSearchedItems(inputCollection, teaText, userSingleCollection, 'Users');
 }
 
 let files = []
@@ -485,7 +502,7 @@ const addNewTea = () => {
         let imgUrl = '';
         let uploadTask;
         database.ref(teaColl.value + '/Users/' + teaName.value).set({
-            cost: teaPrice.value,
+            cost: teaPrice.value + '$',
             place: teaPlace.value,
             description: teaDescription.value,
             email: user.email,
@@ -505,6 +522,7 @@ const addNewTea = () => {
             });
         }
         alert("Success!");
+        onNavigate('#/home')
     }
     else {
         alert("Please, fill in name, price and description.")

@@ -1,0 +1,71 @@
+#header-nav {
+	background-color: var(--secondary-color);
+}
+#header-container {
+	padding: 0 15px 10px;
+	font-size: 22px;
+}
+#header-title h1 {
+	margin: 0;
+	text-align: center;
+}
+.container-inline {
+	display: inline-block; 
+	vertical-align: top;
+}
+.account-btn {
+	margin-top: auto;
+	margin-bottom: auto;
+	font-size: 1.5em;
+	font-family: 'Kavivanar', cursive;
+	color: var(--shadow-color);
+	text-align: center;
+	text-decoration: none;
+    background-color: var(--primary-color);
+    border: 0;
+	border-radius: 8px;
+    box-shadow: 0px 5px 10px #1E2022; 
+    transition: all .3s;
+	outline: none;
+	width: 30%;
+}
+.account-btn:hover {
+	cursor: pointer;
+	background-color: var(--border-color);
+	box-shadow: 0px 15px 25px -5px #1E2022;
+	transform: scale(1.03);
+}
+.account-btn:active {
+	box-shadow: 0px 4px 8px;
+	transform: scale(.98);
+}	
+#search-bar {
+	margin: 10px 0 10px;
+	font-size: 17px;
+	font-family:  'Kavivanar', cursive;
+	border-radius: 8px;
+	outline: none;
+	width: 85%;
+}
+.collection-select {
+	margin: auto 3px auto 0; 
+	font-size: 17px;
+	height: 31px;
+	outline: none;
+	border-radius: 8px;
+	border: 2px solid;
+	font-family:  'Kavivanar', cursive;
+}
+#search-btn {
+	margin: 10px 0px;
+    background-color: transparent;
+    border: none;
+	outline: none;
+    cursor: pointer;
+}
+.log-container {
+	display:flex; 
+	margin-top: auto; 
+	margin-bottom: auto; 
+	flex-direction: column;
+}

@@ -1,0 +1,26 @@
+.unit-tile {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	border: 2px solid var(--font-color);
+	overflow: hidden;
+	width: 200px;
+	height: 200px;
+	margin: 0 auto 15px;
+}
+.unit-tile > img {
+	min-width: 100%;
+	min-height: 100%;
+}
+.unit-tile > .tea-name {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	color: var(--font-color);;
+	background-color: var(--secondary-color);
+	opacity: .9;
+}
+.unit-tile:hover {
+	box-shadow: 0 1px 5px 1px var(--font-color);
+}

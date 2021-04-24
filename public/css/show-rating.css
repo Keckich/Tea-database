@@ -1,0 +1,29 @@
+.item-rate {
+	margin: 0;
+	text-align: right;
+	padding: 10px;
+}
+
+.review-rate {
+	text-align: left;
+	display: inline-block;
+	margin-left: 10px;
+}
+
+.rating-result span:not(.review-count) {
+	padding: 0;
+	font-size: 22px;
+	margin: 0;
+	line-height: 1;
+	color: lightgray;
+	text-shadow: 1px 1px #bbb;
+}
+
+.rating-result > span:not(.review-count):before {
+	content: '★';
+}
+
+.rating-result > span:not(.review-count).active {
+	color: gold;
+	text-shadow: 1px 1px #c60;
+}

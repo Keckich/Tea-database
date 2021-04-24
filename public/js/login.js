@@ -15,10 +15,7 @@ function openTab(event, tabName) {
 function logout () {
 	firebase.auth().signOut().then(() => {
 		// Sign-out successful.
-		//window.alert('Log out successful');
 		onNavigate('#/home');
-	}).catch((error) => {
-		// An error happened.
 	});
 }
 
@@ -56,8 +53,6 @@ function login() {
 		.then((userCredential) => {
 		  	// Signed in
 			var user = userCredential.user;
-			// ...
-			window.alert('Log in successful');
 			onNavigate('#/home');
 		})
 		.catch((error) => {
@@ -70,7 +65,13 @@ function login() {
 function register() {
 	let email = document.getElementById('email-reg').value,
 		password = document.getElementById('password-reg').value,
+		passwordRep = document.getElementById('password-rep').value,
 		username = document.getElementById('username').value;
+	if (password != passwordRep) {
+		document.getElementById('password-match').style.display = "inline";
+		document.getElementById('user-exists').style.display = "none";	
+		return
+	}
 	database.ref('users').startAt(null, username).endAt(null, username).on("value", function(snapshot) {
 		if (snapshot.val() === null) {
 			firebase.auth().createUserWithEmailAndPassword(email, password).then((userCredential) => {
@@ -84,9 +85,9 @@ function register() {
 				user.updateProfile({
 					displayName: username
 				});
-				document.getElementById('register').reset();
-				onNavigate('#/home');				
-				// ...
+				//document.getElementById('register').reset();
+				alert('Registration was successeful.')
+				onNavigate('#/home');	
 			})
 			.catch((error) => {
 				var errorCode = error.code;
@@ -96,12 +97,10 @@ function register() {
 			});
 		}
 		else {
-			document.getElementById('user-exists').style.display = "inline";			
+			document.getElementById('user-exists').style.display = "inline";
+			document.getElementById('password-match').style.display = "none";			
 			return
-		}
-		
+		}		
 	});
-	
-
 }
 
