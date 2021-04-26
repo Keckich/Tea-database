@@ -15,6 +15,9 @@ footer .links a:hover {
 	color: var(--secondary-color);
 	background-color: var(--font-color);
 }
+footer .links a:focus {
+	color: #D96F36;
+}
 #copyright {
 	text-align: center;
 	color: var(--font-color);

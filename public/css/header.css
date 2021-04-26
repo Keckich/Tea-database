@@ -5,8 +5,30 @@
 	padding: 0 15px 10px;
 	font-size: 22px;
 }
-#header-title h1 {
+#logo:focus img {
+	border: 1px solid #D96F36;
+	border-radius: 8px;
+} 
+.header-title a {
+	text-decoration: none;
+}
+.header-title a:focus h1 {
+	text-shadow: 1px 1px 1px #D96F36;
+}
+.header-title h1 {
+	color: #1E2022;
+	font-size: 1.5em;
+	text-transform: uppercase;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px var(--primary-color);
 	margin: 0;
+	text-align: center;
+}
+.header-title p {
+	font-family: 'Dancing Script', cursive;
+	color: var(--font-color);
+	font-size: 0.9em;
+	margin-top: 5px;
 	text-align: center;
 }
 .container-inline {
@@ -39,6 +61,9 @@
 	box-shadow: 0px 4px 8px;
 	transform: scale(.98);
 }	
+.account-btn:focus {
+	border: 1px solid var(--font-color);
+}
 #search-bar {
 	margin: 10px 0 10px;
 	font-size: 17px;
@@ -46,6 +71,10 @@
 	border-radius: 8px;
 	outline: none;
 	width: 85%;
+}
+#search-bar:focus {
+	background: #FFE;	
+	border: 2px solid var(--border-color);
 }
 .collection-select {
 	margin: auto 3px auto 0; 
@@ -56,12 +85,20 @@
 	border: 2px solid;
 	font-family:  'Kavivanar', cursive;
 }
+.collection-select:focus {
+	border: 1px solid var(--border-color);
+	background: #FFE;	
+}
 #search-btn {
-	margin: 10px 0px;
+	margin: 10px 5px;
     background-color: transparent;
     border: none;
 	outline: none;
     cursor: pointer;
+}
+#search-btn:focus {
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
 }
 .log-container {
 	display:flex; 
