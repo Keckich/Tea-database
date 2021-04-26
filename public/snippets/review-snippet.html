@@ -3,7 +3,6 @@
         <h2>Reviews</h2>
         <form id="review-form" onsubmit="writeReview('{{name}}', '{{tea_name}}', '{{users}}');">
             <div class="rating-area review-label">
-                <label>Rating:</label>
                 <input type="radio" id="star-5" name="rating" value="5">
 	            <label class="star-icon" for="star-5" title="«5»"></label>	
 
@@ -18,6 +17,7 @@
 
                 <input type="radio" id="star-1" name="rating" value="1">
 	            <label class="star-icon" for="star-1" title="«1»"></label>
+                <label>Rating:</label>
             </div>
             <div class="review-label">
                 <label>Title:</label>
