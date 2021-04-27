@@ -24,6 +24,7 @@
 .unit-tile:hover {
 	box-shadow: 0 1px 5px 1px var(--font-color);
 }
-.unit-tile:focus {
-	border: 2px solid #D96F36;
+a:focus > .unit-tile {
+	border: 3px solid #D96F36;
+	box-shadow: 3px 3px 25px 3px #D96F36;
 }

@@ -20,7 +20,7 @@
 }
 .review-title:focus {
 	background: #FFE;	
-	border: 2px solid var(--border-color);
+	border: 3px solid #D96F36;
 }
 .review-input {
 	display: block;
@@ -32,14 +32,14 @@
 }
 .review-input:focus {
 	background: #FFE;	
-	border: 2px solid var(--border-color);
+	border: 3px solid #D96F36;
 }
 
 /**** Stars ****/
 .rating-area {
 	display: flex;
 	flex-direction: row-reverse;
-	width: 200px;
+	width: 210px;
 }
 .rating-area > label:last-child {
 	padding-right: 10px;
@@ -51,7 +51,7 @@
 }
 .rating-area:not(:checked) .star-icon {
 	cursor: pointer;
-	font-size: 21px;
+	font-size: 24px;
 	color: lightgray;
 	text-shadow: 1px 1px #bbb;
 }
@@ -74,7 +74,6 @@
 	color: gold;
 	text-shadow: 1px 1px goldenrod;
 }
-
 /**** ****/
 
 .single-review {

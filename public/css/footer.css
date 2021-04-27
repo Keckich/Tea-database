@@ -16,7 +16,10 @@ footer .links a:hover {
 	background-color: var(--font-color);
 }
 footer .links a:focus {
+	outline: none;
 	color: #D96F36;
+	border: 3px solid #D96F36;
+	border-radius: 8px;
 }
 #copyright {
 	text-align: center;

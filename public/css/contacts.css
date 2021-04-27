@@ -13,3 +13,9 @@
     background-color: var(--secondary-color);
 	transform: scale(1.07);
 }
+.icon-contact a {
+    outline: none;
+}
+.icon-contact a:focus i {
+    color: #D96F36;
+}

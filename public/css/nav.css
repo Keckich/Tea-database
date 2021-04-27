@@ -18,6 +18,9 @@
 }
 #nav-list a:focus {
 	color:#D96F36;
+	outline: none;
+	border: 3px solid #D96F36;
+	border-radius: 8px;
 }
 #nav-list li:hover {
 	background: var(--primary-color);

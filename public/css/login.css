@@ -10,7 +10,7 @@
 }
 .input-login:focus {
 	background: #FFE;	
-	border: 3px solid var(--border-color);
+	border: 3px solid #D96F36;
 }
 .label-login {
 	display: block; 
@@ -42,7 +42,8 @@
 	cursor: pointer;
 }
 .submit-btn:focus {
-	border: 2px solid #D96F36;
+	color: #D96F36;
+	border: 3px solid #D96F36;
 }
 .tab {
 	display: flex;
