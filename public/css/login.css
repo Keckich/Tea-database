@@ -12,6 +12,9 @@
 	background: #FFE;	
 	border: 3px solid #D96F36;
 }
+.field-container:focus-within .label-login {
+	color: #D96F36;
+}
 .label-login {
 	display: block; 
 	text-align: left;
