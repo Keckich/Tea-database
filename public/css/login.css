@@ -10,7 +10,8 @@
 }
 .input-login:focus {
 	background: #FFE;	
-	border: 3px solid #D96F36;
+	transition: box-shadow .3s cubic-bezier(0, -0, .50, .50) 1ms;
+	box-shadow: 0px 0px 0px 2px #D96F36;
 }
 .field-container:focus-within .label-login {
 	color: #D96F36;
@@ -46,7 +47,8 @@
 }
 .submit-btn:focus {
 	color: #D96F36;
-	border: 3px solid #D96F36;
+	transition: box-shadow .3s cubic-bezier(0, -0, .50, .50) 1ms;
+	box-shadow: 0px 0px 0px 2px #D96F36;
 }
 .tab {
 	display: flex;

@@ -25,6 +25,6 @@
 	box-shadow: 0 1px 5px 1px var(--font-color);
 }
 a:focus > .unit-tile {
-	border: 3px solid #D96F36;
+	transition: box-shadow .3s cubic-bezier(0, -0, .50, .50) 1ms;
 	box-shadow: 3px 3px 25px 3px #D96F36;
 }

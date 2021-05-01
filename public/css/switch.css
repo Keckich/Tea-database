@@ -34,8 +34,8 @@ input:checked + .slider {
     background-color: #808FC7;
 }
 input:focus + .slider {
-    box-shadow: 0 0 1px #808FC7;
-    border: 2px solid #D96F36;
+    transition: box-shadow .3s cubic-bezier(0, -0, .50, .50) 1ms;
+    box-shadow: 0px 0px 0px 2px #D96F36;
 }
 input:checked + .slider:before {
     background-color: white;

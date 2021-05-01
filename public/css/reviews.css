@@ -22,8 +22,9 @@
     outline: none;
 }
 .review-title:focus {
-	background: #FFE;	
-	border: 3px solid #D96F36;
+	background: #FFE;
+	transition: box-shadow .3s cubic-bezier(0, -0, .50, .50) 1ms;	
+	box-shadow: 0px 0px 0px 2px #D96F36;
 }
 .review-input {
 	display: block;
@@ -35,7 +36,8 @@
 }
 .review-input:focus {
 	background: #FFE;	
-	border: 3px solid #D96F36;
+	transition: box-shadow .3s cubic-bezier(0, -0, .50, .50) 1ms;
+	box-shadow: 0px 0px 0px 2px #D96F36;
 }
 
 /**** Stars ****/
