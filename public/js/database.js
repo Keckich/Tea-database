@@ -104,6 +104,18 @@ class Database {
         });
     }
 
+    editTea(tea) {
+        this.database.ref(tea.collection + '/Users/' + tea.name).update({
+            cost: tea.cost + '$',
+            place: tea.place,
+            description: tea.description
+        });
+    }
+
+    deleteTea(teaColl, teaName) {
+        this.database.ref(teaColl + '/Users/' + teaName).remove();
+    }
+
     addReview(review, users) {
         let dbRef = (users == '{{users}}' ? this.database.ref(review.collection + '/' + review.teaName + '/reviews') : 
                     this.database.ref(review.collection + '/Users/' + review.teaName + '/reviews'));

@@ -12,7 +12,8 @@ const homeHtml = "/snippets/home-snippet.html",
     addHtml = "/snippets/add-snippet.html",
     userCollHtml = "/snippets/user-coll-snippet.html",
     userSingleCollHtml = "/snippets/single-user-coll-snippet.html",
-    userSingleItemHtml = "snippets/single-user-item-snippet.html";
+    userSingleItemHtml = "/snippets/single-user-item-snippet.html",
+    editHtml = "/snippets/edit-snippet.html";
 
 let content = document.getElementById('main-content');
 loadHtmlAsync = (fileUrl) => fetch(fileUrl)
@@ -36,6 +37,7 @@ const home = loadHtmlAsync(homeHtml),
     singleReview = loadHtmlAsync(singleReviewHtml),
     search = loadHtmlAsync(searchHtml),
     addTea = loadHtmlAsync(addHtml),
+    editTea = loadHtmlAsync(editHtml),
     userCollections = loadHtmlAsync(userCollHtml),
     userSingleCollection = loadHtmlAsync(userSingleCollHtml),
     userSingleItem = loadHtmlAsync(userSingleItemHtml);
@@ -54,7 +56,8 @@ const routes = {
     '/users-tea/{{name}}/{{tea_name}}': userSingleItem,
     '/login': logIn,
     '/search?tea={{search_tea}}&collection={{name}}': search,
-    '/add': addTea
+    '/add': addTea,
+    '/edit/{{name}}/{{tea_name}}': editTea
 };
 
 const loadHomeTea = (htmlPromise, selector, fourMostRated, users) => {
@@ -188,6 +191,7 @@ const loadSingleCollection = async (dataHtml, content, name, title, users) => {
 
 const loadSingleTea = async (dataHtml, content, request, name, teaName, users) => {
     let tea = await database.getTea(name, teaName, users);
+    let user = firebase.auth().currentUser;
     let finalHtml = '<article id="single-unit" class="row flex-wrap-space">';
     finalHtml += dataHtml;
     finalHtml = insertProperty(finalHtml, 'name', name);
@@ -204,6 +208,7 @@ const loadSingleTea = async (dataHtml, content, request, name, teaName, users) =
         finalHtml = insertProperty(finalHtml, 'img_url', tea.link);
         finalHtml = insertProperty(finalHtml, 'place', tea.place);
         finalHtml = insertProperty(finalHtml, 'description', tea.description);
+
     }
     else {
         finalHtml = insertProperty(finalHtml, 'brand', tea.brand);
@@ -222,6 +227,14 @@ const loadSingleTea = async (dataHtml, content, request, name, teaName, users) =
             let li = document.createElement('li');
             li.innerHTML = tea.facts[i];
             targetElem.appendChild(li)
+        }
+    }
+    else {
+        let delBtn = document.getElementById("delete-btn"),
+            editBtn = document.getElementById("edit-btn");
+        if (user.email == tea.email) {
+            delBtn.style.display = 'inline-block';
+            editBtn.style.display = 'inline-block';
         }
     }
     let stars = document.querySelectorAll('.rating-result span');
@@ -274,6 +287,22 @@ const loadAllReviews = async (name, teaName, users) => {
 const loadSearch = (dataHtml, teaName) => {
     dataHtml = insertProperty(dataHtml, 'search_tea', teaName);
     content.innerHTML = dataHtml;
+}
+
+const loadEdit = async(teaColl, teaName) => {
+    let tea = await database.getTea(teaColl, teaName, 'Users');
+    let selectTea = document.getElementById('edit-tea-collection').getElementsByTagName('option');
+    for (let i = 0; i < selectTea.length; i++) {
+        if (selectTea[i].value == teaColl) {
+            selectTea[i].selected = true;
+            break;
+        }
+    }
+    document.getElementById('edit-tea-name').value = teaName;
+    document.getElementById('edit-tea-price').value = tea.cost.replace('$', '');
+    document.getElementById('edit-tea-description').value = tea.description;
+    if (tea.place) document.getElementById('edit-tea-place').value = tea.place;
+    if (tea.link) document.getElementById('edit-tea-photo').src = tea.link;
 }
 
 const parseURL = () => {
@@ -374,8 +403,11 @@ const loadPage = () => {
                     loadSingleTea(dataHtml, content, request, request.collection, request.tea, "Users");
                     break;
                 case '/search?tea={{search_tea}}&collection={{name}}':
-                    console.log('WE R HERE')
                     loadSearch(dataHtml, request.tea);
+                    break;
+                case '/edit/{{name}}/{{tea_name}}':
+                    content.innerHTML = dataHtml;
+                    loadEdit(request.collection, request.tea);
                     break;
                 default:
                     content.innerHTML = dataHtml;
@@ -456,7 +488,7 @@ const showImg = (event) => {
     event.currentTarget.onchange = event => {
         files = event.target.files;
         reader = new FileReader();
-        let photo = document.getElementById("tea-photo");
+        let photo = document.getElementById("edit-tea-photo");
         reader.onload = () => {
             photo.src = reader.result;
         }
@@ -499,6 +531,49 @@ const addNewTea = () => {
 
 
 
+}
+
+const removeTea = (teaColl, teaName) => {
+    let isDelete = confirm('Are you sure to delete this item? It can\'t be restored.');
+    if (isDelete) {
+        database.deleteTea(teaColl, teaName);    
+        let path = window.location.hash;
+        let index = path.lastIndexOf('/');
+        onNavigate(path.slice(0, index));        
+    }       
+}
+
+const editExsTea = () => {
+    let teaName = document.getElementById("edit-tea-name"),
+        teaColl = document.getElementById("edit-tea-collection"),
+        teaPrice = document.getElementById("edit-tea-price"),
+        teaDescription = document.getElementById("edit-tea-description"),
+        teaPlace = document.getElementById("edit-tea-place");
+    let user = firebase.auth().currentUser
+    if ((teaName && teaName.value) && (teaPrice && teaPrice.value) &&
+        (teaDescription && teaDescription.value)) {
+        let imgUrl = '';
+        let uploadTask;
+        let tea = new Tea(teaColl.value, teaName.value, teaPrice.value, teaPlace.value, teaDescription.value, user);
+        database.editTea(tea);
+        if (files[0]) {
+            uploadTask = firebase.storage().ref('images/' + user.uid + '/' + teaName.value).put(files[0]);
+            uploadTask.on('state_changed', function () {
+                uploadTask.snapshot.ref.getDownloadURL().then(function (url) {
+                    imgUrl = url;
+                    firebase.database().ref(teaColl.value + '/Users/' + teaName.value).update({
+                        link: imgUrl
+                    });
+                });
+            });
+        }
+        alert("Success!");
+        onNavigate('#/home')
+    }
+    else {
+        alert("Please, fill in name, price and description.")
+        return
+    }
 }
 
 const onNavigate = (pathname) => {

@@ -16,7 +16,9 @@
     <p class="price">
         <strong>Cost:&nbsp;</strong>
         {{cost}}
-    </p>			
+    </p>	  
+    <button id="delete-btn" class="submit-btn" style="display: none; margin: 0;" onclick="removeTea('{{name}}', '{{tea_name}}');">Delete</button>
+    <button id="edit-btn" class="submit-btn" style="display: none; margin: 0;" onclick="onNavigate('#/edit/{{name}}/{{tea_name}}');">Edit</button>        	
     <hr>
     <div id="description">
         <p>

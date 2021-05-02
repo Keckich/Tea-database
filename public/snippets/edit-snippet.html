@@ -1,0 +1,36 @@
+<h2>Edit your tea</h2>
+<form id="edit-form" class="flex-wrap-space" onsubmit="editExsTea(); return false;">
+    <section>
+        <div class="review-label">
+            <label class="label-title">Collection:</label>
+            <select id="edit-tea-collection" class="collection-select">
+                <option disabled>Collection</option>
+                <option value="Black">Black</option>
+                <option value="Green">Green</option>
+                <option value="Iced">Iced</option>
+            </select>           
+        </div>
+        <div class="review-label">
+            <label class="label-title">Name:</label>
+            <input id="edit-tea-name" type="text" class="review-title" disabled>
+        </div>
+        <div class="review-label">
+            <label class="label-title">Price ($):</label>
+            <input id="edit-tea-price" type="number" min="0" step="0.01" class="review-title">
+        </div>
+        <div class="review-label">
+            <label class="label-title">Description:</label>
+            <textarea id="edit-tea-description" class="review-input" rows="4" placeholder="Put your words here..."></textarea>
+        </div>
+        <div class="review-label">
+            <label class="label-title">Where did you get this tea?</label>
+            <input id="edit-tea-place" type="text" class="review-title">
+        </div>
+        <button class="submit-btn">Edit</button>
+    </section>
+    <section id="edit-photo-section">
+        <h3>Photo of your tea:</h3>
+        <img id="edit-tea-photo" class="unit-tile" style="width: 410px; height: 410px;" src="1.png">
+        <input id="edit-img" type="file" onclick="showImg(event);">
+    </section> 
+</form>
