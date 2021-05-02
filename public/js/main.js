@@ -61,7 +61,7 @@ const loadHomeTea = (htmlPromise, selector, fourMostRated, users) => {
     htmlPromise.then(async (itemHtml) => {
         let finalHtml = "";
         for (let item of fourMostRated) {
-            let tea = await getTea(item[1], item[0], users);
+            let tea = await database.getTea(item[1], item[0], users);
             let html = itemHtml;
             html = insertProperty(html, 'tea_name', item[0]);
             html = insertProperty(html, 'id_tea_name', item[0].replace(' ', ''));
@@ -71,7 +71,7 @@ const loadHomeTea = (htmlPromise, selector, fourMostRated, users) => {
             if (users) {
                 html = insertProperty(html, 'img_url', tea.link);
             }
-            markCount = await getReviewCount(item[1], item[0], users);
+            markCount = await database.getReviewCount(item[1], item[0], users);
             if (markCount) {
                 html = insertProperty(html, 'count', markCount);
             }
@@ -84,21 +84,34 @@ const loadHomeTea = (htmlPromise, selector, fourMostRated, users) => {
         if (targetElem) targetElem.insertAdjacentHTML('beforeend', finalHtml);
         fourMostRated.forEach((item) => {
             let stars = document.querySelectorAll('#' + item[0].replace(' ', '') + ' span');
-            showRating(item[1], item[0], stars, users);
+            database.showRating(item[1], item[0], stars, users);
         });
 
     });
 }
 
+const sortByRate = (array) => {
+    array.sort((prev, next) => {
+        if (prev[2] < next[2]) {
+            return 1;
+        }
+        if (prev[2] > next[2]) {
+            return -1;
+        }
+        return 0;
+    })
+    return array
+}
+
 const loadHome = async () => {
-    let colls = await getCollections();
+    let colls = await database.getCollections();
     let mostRated = [], mostRatedUser = [];
     for (let coll in colls) {
-        for (let item in await getOrderedItems(coll)) {
-            mostRated.push([item, coll, await getRating(coll, item)])
+        for (let item in await database.getOrderedItems(coll)) {
+            mostRated.push([item, coll, await database.getRating(coll, item)])
         }
-        for (let item in await getOrderedItems(coll, "Users")) {
-            mostRatedUser.push([item, coll, await getRating(coll, item, "Users")])
+        for (let item in await database.getOrderedItems(coll, "Users")) {
+            mostRatedUser.push([item, coll, await database.getRating(coll, item, "Users")])
         }
     }
 
@@ -115,15 +128,15 @@ const loadHome = async () => {
 }
 
 const loadCollections = async (dataHtml, content, title) => {
-    let colls = await getCollections();
+    let colls = await database.getCollections();
     title.then(async (titleHtml) => {
         let finalHtml = titleHtml;
         finalHtml += "<article class='row'>";
         for (let coll in colls) {
             let html = dataHtml;
-            console.log(await getImg(coll));
+            console.log(await database.getImg(coll));
             html = insertProperty(html, 'name', coll);
-            html = insertProperty(html, 'img_name', await getImg(coll));
+            html = insertProperty(html, 'img_name', await database.getImg(coll));
             finalHtml += html;
         }
         finalHtml += '</article>';
@@ -133,7 +146,7 @@ const loadCollections = async (dataHtml, content, title) => {
 }
 
 const loadSingleCollection = async (dataHtml, content, name, title, users) => {
-    let collection = await getCollection(name, users);
+    let collection = await database.getCollection(name, users);
     title.then(async (titleHtml) => {
         let finalHtml = titleHtml;
         finalHtml = insertProperty(finalHtml, 'name', name);
@@ -146,12 +159,12 @@ const loadSingleCollection = async (dataHtml, content, name, title, users) => {
             html = insertProperty(html, 'tea_name', tea);
             html = insertProperty(html, 'id_tea_name', tea.replace(' ', ''));
             html = insertProperty(html, 'name', name);
-            html = insertProperty(html, 'cost', await getCost(name, tea, users));
+            html = insertProperty(html, 'cost', await database.getCost(name, tea, users));
             if (users) {
-                let singleTea = await getTea(name, tea, users);
+                let singleTea = await database.getTea(name, tea, users);
                 html = insertProperty(html, 'img_url', singleTea.link);
             }
-            let markCount = await getReviewCount(name, tea, users);
+            let markCount = await database.getReviewCount(name, tea, users);
             if (markCount) {
                 html = insertProperty(html, 'count', markCount);
             }
@@ -168,18 +181,18 @@ const loadSingleCollection = async (dataHtml, content, name, title, users) => {
                 continue;
             }
             let stars = document.querySelectorAll('#' + tea.replace(' ', '') + ' span');
-            showRating(name, tea, stars, users);
+            database.showRating(name, tea, stars, users);
         }
     });
 }
 
 const loadSingleTea = async (dataHtml, content, request, name, teaName, users) => {
-    let tea = await getTea(name, teaName, users);
+    let tea = await database.getTea(name, teaName, users);
     let finalHtml = '<article id="single-unit" class="row flex-wrap-space">';
     finalHtml += dataHtml;
     finalHtml = insertProperty(finalHtml, 'name', name);
     finalHtml = insertProperty(finalHtml, 'tea_name', teaName);
-    let markCount = await getReviewCount(name, teaName, users);
+    let markCount = await database.getReviewCount(name, teaName, users);
     if (markCount) {
         finalHtml = insertProperty(finalHtml, 'count', markCount);
     }
@@ -212,7 +225,7 @@ const loadSingleTea = async (dataHtml, content, request, name, teaName, users) =
         }
     }
     let stars = document.querySelectorAll('.rating-result span');
-    showRating(name, teaName, stars, users);
+    database.showRating(name, teaName, stars, users);
     loadReviewSection(request, users);
     loadAllReviews(name, teaName, users);
 }
@@ -230,9 +243,9 @@ const loadReviewSection = (request, users) => {
 }
 
 const loadAllReviews = async (name, teaName, users) => {
-    let allReviews = await getReviews(name, teaName, users);
+    let allReviews = await database.getReviews(name, teaName, users);
     for (let rev in allReviews) {
-        let single = await getReview(name, teaName, rev, users);
+        let single = await database.getReview(name, teaName, rev, users);
         console.log('all:' + single.content)
         singleReview.then(dataHtml => {
             let finalHtml = '';
@@ -288,41 +301,7 @@ const parseURL = () => {
         request.tea = request.tea.replace('%20', ' ');
     }
     console.log('r:' + r)
-
-
-
     return request
-}
-
-const showRating = (name, teaName, stars, users) => {
-    let dbRef = (users ? database.ref(name + '/Users/' + teaName + '/reviews') :
-        database.ref(name + '/' + teaName + '/reviews'));
-    let dbRefRate = (users ? database.ref(name + '/Users/' + teaName) :
-        database.ref(name + '/' + teaName));
-    dbRef.on("value", function (snapshot) {
-        let sumRating = 0,
-            markCount = snapshot.numChildren();
-        snapshot.forEach(function (data) {
-            sumRating += parseInt(data.val().rating);
-        });
-        sumRating /= markCount;
-        if (!sumRating) {
-            return
-        }
-        dbRefRate.update({
-            rating: sumRating
-        });
-
-
-        for (let i = 0; i < stars.length; i++) {
-            if (sumRating >= i + 0.5) {
-                stars[i].classList.add('active');
-            }
-            else {
-                break;
-            }
-        }
-    });
 }
 
 const getReviewRating = () => {
@@ -337,23 +316,15 @@ const getReviewRating = () => {
     return rate;
 }
 
-const writeReview = (name, teaName, users) => {
+const writeReview = (teaColl, teaName, users) => {
     let user = firebase.auth().currentUser;
     if (user) {
         let titleReview = document.getElementById('review-title'),
             userReview = document.getElementById('review-input');
         let rate = getReviewRating();
         if ((titleReview && titleReview.value) && (userReview && userReview.value) && rate) {
-            console.log('user:' + users);
-            let dbRef = (users == '{{users}}' ? database.ref(name + '/' + teaName + '/reviews') : database.ref(name + '/Users/' + teaName + '/reviews'))
-            dbRef.push({
-                title: titleReview.value,
-                content: userReview.value,
-                rating: rate,
-                date: new Date().toLocaleString(),
-                username: user.displayName,
-                email: user.email
-            });
+            let rev = new Review(teaColl, teaName, titleReview.value, userReview.value, rate, user);
+            database.addReview(rev, users);
         }
         else {
             alert('Error: please, fill in all the fields.')
@@ -415,7 +386,7 @@ const loadPage = () => {
 }
 
 const getSearchedItems = async (inputCollection, teaText, htmlPromise, users) => {
-    let collection = await getCollection(inputCollection, users);
+    let collection = await database.getCollection(inputCollection, users);
     let finalHtml = "";
     let matches = [];
     htmlPromise.then(async (dataHtml) => {
@@ -429,12 +400,12 @@ const getSearchedItems = async (inputCollection, teaText, htmlPromise, users) =>
                 html = insertProperty(html, 'tea_name', tea);
                 html = insertProperty(html, 'id_tea_name', tea.replace(' ', ''));
                 html = insertProperty(html, 'name', inputCollection);
-                html = insertProperty(html, 'cost', await getCost(inputCollection, tea, users));
+                html = insertProperty(html, 'cost', await database.getCost(inputCollection, tea, users));
                 if (users) {
-                    let singleTea = await getTea(inputCollection, tea, users);
+                    let singleTea = await database.getTea(inputCollection, tea, users);
                     html = insertProperty(html, 'img_url', singleTea.link);
                 }
-                let markCount = await getReviewCount(inputCollection, tea, users);
+                let markCount = await database.getReviewCount(inputCollection, tea, users);
                 if (markCount) {
                     html = insertProperty(html, 'count', markCount);
                 }
@@ -456,7 +427,7 @@ const getSearchedItems = async (inputCollection, teaText, htmlPromise, users) =>
                 continue;
             }
             let stars = document.querySelectorAll('#' + tea.replace(' ', '') + ' span');
-            showRating(inputCollection, tea, stars, users);
+            database.showRating(inputCollection, tea, stars, users);
         }
     });
 
@@ -504,14 +475,8 @@ const addNewTea = () => {
         (teaDescription && teaDescription.value)) {
         let imgUrl = '';
         let uploadTask;
-        database.ref(teaColl.value + '/Users/' + teaName.value).set({
-            cost: teaPrice.value + '$',
-            place: teaPlace.value,
-            description: teaDescription.value,
-            email: user.email,
-            username: user.displayName,
-            uid: user.uid
-        });
+        let tea = new Tea(teaColl.value, teaName.value, teaPrice.value, teaPlace.value, teaDescription.value, user);
+        database.addTea(tea);
         console.log('photo:' + files[0])
         if (files[0]) {
             uploadTask = firebase.storage().ref('images/' + user.uid + '/' + teaName.value).put(files[0]);

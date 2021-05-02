@@ -1,10 +1,12 @@
 class Tea {
-    constructor(title, content, rating, username, email) {
-        this.title = title;
-        this.content = content;
-        this.rating = rating;
-        this.date = new Date().toLocaleString();
-        this.username = username;
-        this.email = email;
+    constructor(collection, name, cost, place, description, user) {
+        this.collection = collection;
+        this.name = name;
+        this.cost = cost;
+        this.place = place;
+        this.description = description;
+        this.email = user.email;
+        this.username = user.displayName;
+        this.uid = user.uid;
     }
 }

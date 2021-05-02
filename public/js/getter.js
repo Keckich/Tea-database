@@ -47,15 +47,3 @@ const getReview = async(coll, tea, key, users) => {
     else return (await database.ref(coll + '/' + tea + '/reviews/' + key).once("value")).val();
 }
 
-const sortByRate = (array) => {
-    array.sort((prev, next) => {
-        if (prev[2] < next[2]) {
-            return 1;
-        }
-        if (prev[2] > next[2]) {
-            return -1;
-        }
-        return 0;
-    })
-    return array
-}

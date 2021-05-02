@@ -17,7 +17,7 @@
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	color: var(--font-color);;
+	color: var(--font-color);
 	background-color: var(--secondary-color);
 	opacity: .9;
 }
