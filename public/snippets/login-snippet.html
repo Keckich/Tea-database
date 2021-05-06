@@ -2,7 +2,7 @@
     <button id="log-in-tab" class="tab-link active" onclick="openTab(event, 'log-in');">LogIn</button>
     <button id="register-tab" class="tab-link" onclick="openTab(event, 'register');">Register</button>
 </div>
-<form id="log-in" class="form-login" onsubmit="login(); return false;">
+<form id="log-in" class="form-login" onsubmit="submitLogIn(); return false;">
     <div class="field-container" >
         <label class="label-login">Email:</label>
         <input type="text" id="email-login" class="input-login">
@@ -14,7 +14,7 @@
     <button class="submit-btn">Log In</button>
 </form><!-- LogIn end -->
 
-<form id="register" class="form-login" onsubmit="register(); return false;">
+<form id="register" class="form-login" onsubmit="submitRegister(); return false;">
     <div class="field-container" >
         <label class="label-login">Email:</label>
         <input type="text" id="email-reg" class="input-login">
@@ -23,6 +23,7 @@
         <label class="label-login">Username:</label>
         <input type="text" id="username" class="input-login">
         <span id="user-exists" style="display: none;">This username is already taken</span>
+        <span id="user-short" style="display: none;">Username must be longer than 3 characters. </span>
     </div>
     <div class="field-container" >
         <label class="label-login">Password:</label>

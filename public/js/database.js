@@ -64,6 +64,17 @@ class Database {
         else return (await this.database.ref(coll + '/' + tea + '/reviews/' + key).once("value")).val();
     }
 
+    async getExistUsers(username) {
+        return (await this.database.ref('users').startAt(null, username).endAt(null, username).once("value")).val()
+    }
+
+    addUser(user, username) {
+        this.database.ref('users/' + username).set({
+            uid: user.uid,
+            email: user.email
+        })
+    }
+
     showRating(coll, teaName, stars, users) {
         let dbRef = (users ? this.database.ref(coll + '/Users/' + teaName + '/reviews') :
                     this.database.ref(coll + '/' + teaName + '/reviews'));

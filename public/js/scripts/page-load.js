@@ -47,7 +47,6 @@ const routes = {
     '/': home,
     '/home': home,
     '/contacts': contacts,
-    // '/about' : about,
     '/collections': collections,
     '/collections/{{name}}': singleCollection,
     '/collections/{{name}}/{{tea_name}}': singleTea,
@@ -91,19 +90,6 @@ const loadHomeTea = (htmlPromise, selector, fourMostRated, users) => {
         });
 
     });
-}
-
-const sortByRate = (array) => {
-    array.sort((prev, next) => {
-        if (prev[2] < next[2]) {
-            return 1;
-        }
-        if (prev[2] > next[2]) {
-            return -1;
-        }
-        return 0;
-    })
-    return array
 }
 
 const loadHome = async () => {
@@ -305,46 +291,6 @@ const loadEdit = async(teaColl, teaName) => {
     if (tea.link) document.getElementById('edit-tea-photo').src = tea.link;
 }
 
-const parseURL = () => {
-    let url = location.hash.slice(1) || '/';
-    let r = '';
-    let request = {
-        resource: null,
-        collection: null,
-        tea: null
-    };
-    if (url.includes('&')) {
-        r = url.split("&");
-        console.log('r[0]:' + r[0])
-        request.resource = r[0].split("?")[0].split("/")[1]
-        request.collection = r[1].split("=").pop()
-        request.tea = r[0].split("=").pop()
-    }
-    else {
-        r = url.split("/");
-        request.resource = r[1];
-        request.collection = r[2];
-        request.tea = r[3];
-    }
-    if (request.tea && request.tea.includes('%20')) {
-        request.tea = request.tea.replace('%20', ' ');
-    }
-    console.log('r:' + r)
-    return request
-}
-
-const getReviewRating = () => {
-    let rateStars = document.getElementsByName('rating');
-    let rate;
-    for (let star of rateStars) {
-        if (star.checked) {
-            rate = star.value;
-            break;
-        };
-    };
-    return rate;
-}
-
 const writeReview = (teaColl, teaName, users) => {
     let user = firebase.auth().currentUser;
     if (user) {
@@ -482,100 +428,6 @@ const searchTea = () => {
     getSearchedItems(inputCollection, teaText, userSingleCollection, 'Users');
 }
 
-let files = []
-const showImg = (event) => {
-    let reader;
-    event.currentTarget.onchange = event => {
-        files = event.target.files;
-        reader = new FileReader();
-        let photo = document.getElementById("edit-tea-photo");
-        reader.onload = () => {
-            photo.src = reader.result;
-        }
-        reader.readAsDataURL(files[0]);
-    }
-}
-
-const addNewTea = () => {
-    let teaName = document.getElementById("new-tea-name"),
-        teaColl = document.getElementById("new-tea-collection"),
-        teaPrice = document.getElementById("new-tea-price"),
-        teaDescription = document.getElementById("new-tea-description"),
-        teaPlace = document.getElementById("new-tea-place");
-    let user = firebase.auth().currentUser
-    if ((teaName && teaName.value) && (teaPrice && teaPrice.value) &&
-        (teaDescription && teaDescription.value)) {
-        let imgUrl = '';
-        let uploadTask;
-        let tea = new Tea(teaColl.value, teaName.value, teaPrice.value, teaPlace.value, teaDescription.value, user);
-        database.addTea(tea);
-        console.log('photo:' + files[0])
-        if (files[0]) {
-            uploadTask = firebase.storage().ref('images/' + user.uid + '/' + teaName.value).put(files[0]);
-            uploadTask.on('state_changed', function () {
-                uploadTask.snapshot.ref.getDownloadURL().then(function (url) {
-                    imgUrl = url;
-                    firebase.database().ref(teaColl.value + '/Users/' + teaName.value).update({
-                        link: imgUrl
-                    });
-                });
-            });
-        }
-        alert("Success!");
-        onNavigate('#/home')
-    }
-    else {
-        alert("Please, fill in name, price and description.")
-        return
-    }
-
-
-
-}
-
-const removeTea = (teaColl, teaName) => {
-    let isDelete = confirm('Are you sure to delete this item? It can\'t be restored.');
-    if (isDelete) {
-        database.deleteTea(teaColl, teaName);    
-        let path = window.location.hash;
-        let index = path.lastIndexOf('/');
-        onNavigate(path.slice(0, index));        
-    }       
-}
-
-const editExsTea = () => {
-    let teaName = document.getElementById("edit-tea-name"),
-        teaColl = document.getElementById("edit-tea-collection"),
-        teaPrice = document.getElementById("edit-tea-price"),
-        teaDescription = document.getElementById("edit-tea-description"),
-        teaPlace = document.getElementById("edit-tea-place");
-    let user = firebase.auth().currentUser
-    if ((teaName && teaName.value) && (teaPrice && teaPrice.value) &&
-        (teaDescription && teaDescription.value)) {
-        let imgUrl = '';
-        let uploadTask;
-        let tea = new Tea(teaColl.value, teaName.value, teaPrice.value, teaPlace.value, teaDescription.value, user);
-        database.editTea(tea);
-        if (files[0]) {
-            uploadTask = firebase.storage().ref('images/' + user.uid + '/' + teaName.value).put(files[0]);
-            uploadTask.on('state_changed', function () {
-                uploadTask.snapshot.ref.getDownloadURL().then(function (url) {
-                    imgUrl = url;
-                    firebase.database().ref(teaColl.value + '/Users/' + teaName.value).update({
-                        link: imgUrl
-                    });
-                });
-            });
-        }
-        alert("Success!");
-        onNavigate('#/home')
-    }
-    else {
-        alert("Please, fill in name, price and description.")
-        return
-    }
-}
-
 const onNavigate = (pathname) => {
     window.history.pushState(
         {},
@@ -597,23 +449,6 @@ window.onbeforeunload = () => {
         window.location.hash
     );
     loadPage();
-}
-
-const insertHtml = (selector, html) => {
-    let targetElem = document.querySelector(selector);
-    targetElem.innerHTML = html;
-}
-
-const insertProperty = (string, propName, propValue) => {
-    let propToReplace = "{{" + propName + "}}";
-    string = string.replace(new RegExp(propToReplace, "g"), propValue);
-    return string;
-}
-
-const showLoading = (selector) => {
-    let html = "<div class='text-center'>";
-    html += "<img src='images/ajax-loader.gif'></div>";
-    insertHtml(selector, html)
 }
 
 showLoading("#main-content");
