@@ -1,5 +1,5 @@
 const homeHtml = "/snippets/home-snippet.html",
-    contactsHtml = "/snippets/contacts.html"
+    contactsHtml = "/snippets/contacts.html",
     collectionsHtml = "/snippets/coll-snippet.html",
     collectionsTitleHtml = "/snippets/coll-title-snippet.html",
     singleCollectionHtml = "/snippets/single-coll-snippet.html",
@@ -218,10 +218,13 @@ const loadSingleTea = async (dataHtml, content, request, name, teaName, users) =
     else {
         let delBtn = document.getElementById("delete-btn"),
             editBtn = document.getElementById("edit-btn");
-        if (user.email == tea.email) {
-            delBtn.style.display = 'inline-block';
-            editBtn.style.display = 'inline-block';
+        if (user) {
+            if (user.email == tea.email) {
+                delBtn.style.display = 'inline-block';
+                editBtn.style.display = 'inline-block';
+            }            
         }
+
     }
     let stars = document.querySelectorAll('.rating-result span');
     database.showRating(name, teaName, stars, users);
