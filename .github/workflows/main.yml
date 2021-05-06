@@ -1,19 +1,21 @@
 name: Deploy to Firebase
 on:
   push:
-    branches:
-      - master
+    branches: [ main ]
+    
+  # Run workflow manually
+  workflow_dispatch:
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
+      - name: Checkout repository
+        uses: actions/checkout@main
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
-        env:
+        env: 
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
