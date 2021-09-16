@@ -1,0 +1,565 @@
+{
+  "Black" : {
+    "Assam" : {
+      "brand" : "Sencha Tea Bar",
+      "cost" : "$6.58",
+      "energy" : "High Caffeine",
+      "facts" : [ "Our Assam tea is a traditional black tea grown in northern India.", "This tea is full-bodied with a naturally creamy and malted flavor profile.", "Assam stands up well to milk and honey and can be enjoyed iced or hot. " ],
+      "id" : 1,
+      "item_form" : "Loose leaves",
+      "origin" : "India",
+      "rating" : 2.6666666666666665,
+      "reviews" : {
+        "-MYlolPzP5SLmC8vfDmM" : {
+          "content" : "asd",
+          "date" : "21.04.2021, 03:27:25",
+          "email" : "1@mail.ru",
+          "rating" : "4",
+          "title" : "ddd",
+          "username" : "Meme"
+        },
+        "-MYlr3cvN2IUwR40H1_6" : {
+          "content" : "zxc",
+          "date" : "21.04.2021, 03:37:28",
+          "email" : "1@mail.ru",
+          "rating" : "3",
+          "title" : "zxc",
+          "username" : "Meme"
+        },
+        "-MYoqAiCDlfHInn36ZRK" : {
+          "content" : "aaa",
+          "date" : "21.04.2021, 17:32:23",
+          "email" : "1@mail.ru",
+          "rating" : "1",
+          "title" : "aaa",
+          "username" : "Meme"
+        },
+        "-MYpRPAFRo7zsuTVD-6-" : {
+          "content" : "gg",
+          "date" : "21.04.2021, 20:19:24",
+          "email" : "1@mail.ru",
+          "rating" : "1",
+          "title" : "gg",
+          "username" : "Meme"
+        },
+        "-MYx2XhRqTa5LTaaUo71" : {
+          "content" : "qweqwqweqew3233232",
+          "date" : "23.04.2021, 07:47:46",
+          "email" : "1@mail.ru",
+          "rating" : "3",
+          "title" : "qwe",
+          "username" : "Meme"
+        },
+        "-MYzA8jCYoq4q-0XAp65" : {
+          "content" : "asd11111",
+          "date" : "23.04.2021, 17:40:16",
+          "email" : "1@mail.ru",
+          "rating" : "4",
+          "title" : "asdasd",
+          "username" : "Meme"
+        }
+      },
+      "steeping" : "4-5 min",
+      "temperature" : "212°F / 100°C"
+    },
+    "Chestnut" : {
+      "brand" : "Brand: Sencha Tea Bar",
+      "cost" : "6.99$",
+      "energy" : "High Caffeine",
+      "facts" : [ "The warm, roasted aroma of chestnuts melds with the full-bodied black tea in this blend  to produce a cup rich in lingering flavor that brings to mind Autumn evenings by the fire.", "Add milk and honey for a more decadent experience." ],
+      "id" : 2,
+      "item_form" : "Loose leaves",
+      "origin" : "China",
+      "rating" : 2.6666666666666665,
+      "reviews" : {
+        "-MYpRVjLh4_dSEhPhaCJ" : {
+          "content" : "sdf",
+          "date" : "21.04.2021, 20:19:51",
+          "email" : "1@mail.ru",
+          "rating" : "4",
+          "title" : "sdf",
+          "username" : "Meme"
+        },
+        "-MYpSKSzHxRs1BFL6jsR" : {
+          "content" : "asd",
+          "date" : "21.04.2021, 20:23:27",
+          "email" : "1@mail.ru",
+          "rating" : "1",
+          "title" : "asd",
+          "username" : "Meme"
+        },
+        "-MYpSMzbTR_n6BMJs4r8" : {
+          "content" : "zxcc",
+          "date" : "21.04.2021, 20:23:37",
+          "email" : "1@mail.ru",
+          "rating" : "1",
+          "title" : "asd",
+          "username" : "Meme"
+        },
+        "-MYwvvbGz7v8xtkBlmIf" : {
+          "content" : "asdads123123",
+          "date" : "23.04.2021, 07:14:31",
+          "email" : "1@mail.ru",
+          "rating" : "3",
+          "title" : "asdads",
+          "username" : "Meme"
+        },
+        "-MYwwC3GEzNC7X2X7-2A" : {
+          "content" : "asdasd1567567",
+          "date" : "23.04.2021, 07:15:43",
+          "email" : "1@mail.ru",
+          "rating" : "4",
+          "title" : "asdas",
+          "username" : "Meme"
+        },
+        "-MYx8OMobt19Nhg9IQRa" : {
+          "content" : "xzzxczcx",
+          "date" : "23.04.2021, 08:13:21",
+          "email" : "1@mail.ru",
+          "rating" : "3",
+          "title" : "asdasdasd",
+          "username" : "Meme"
+        }
+      },
+      "steeping" : "3-4 min",
+      "temperature" : "212°F / 100°C"
+    },
+    "Lapsang Souchong" : {
+      "brand" : "Sencha Tea Bar",
+      "cost" : "9.98$",
+      "energy" : "High Caffeine",
+      "facts" : [ "This unique traditional black tea from China is smoked over a pine fire during processing which gives it a distinct flavor and aroma.", "Lapsang Souchong is characterized by a clean, crisp smokiness and finishes with notes of sweet pine." ],
+      "item_form" : "Loose leaves",
+      "origin" : "China",
+      "rating" : 4,
+      "reviews" : {
+        "-MYp_uyc1ZftQOBbEUMf" : {
+          "content" : "ewr",
+          "date" : "21.04.2021, 21:00:57",
+          "email" : "1@mail.ru",
+          "rating" : "5",
+          "title" : "555",
+          "username" : "Meme"
+        },
+        "-MYpa3QfAi4LuSAKG1fy" : {
+          "content" : "dsfdsf",
+          "date" : "21.04.2021, 21:01:36",
+          "email" : "1@mail.ru",
+          "rating" : "5",
+          "title" : "dsfds",
+          "username" : "Meme"
+        },
+        "-MYpbUH1-iRf_6EXZXQp" : {
+          "content" : "adsad",
+          "date" : "21.04.2021, 21:07:48",
+          "email" : "1@mail.ru",
+          "rating" : "5",
+          "title" : "123",
+          "username" : "Meme"
+        },
+        "-MYpedDtm4Sq6p-bjyQV" : {
+          "content" : "sdf",
+          "date" : "21.04.2021, 21:21:35",
+          "email" : "1@mail.ru",
+          "rating" : "4",
+          "title" : "wer",
+          "username" : "Meme"
+        },
+        "-MYpewK7QGG_auszJMTn" : {
+          "content" : "asd",
+          "date" : "21.04.2021, 21:22:54",
+          "email" : "1@mail.ru",
+          "rating" : "1",
+          "title" : "asd",
+          "username" : "Meme"
+        }
+      },
+      "steeping" : "3-5 min",
+      "temperature" : "212°F / 100°C"
+    },
+    "Moonlight" : {
+      "brand" : "Sencha Tea Bar",
+      "cost" : "6.99$",
+      "energy" : "High Caffeine",
+      "facts" : [ "Moonlight offers a  rich smooth blend of black tea, chamomile and lavender.", "This tea is characterized by mellow Sips and a floral aftertaste." ],
+      "item_form" : "Loose leaves ",
+      "origin" : "China",
+      "rating" : 4.75,
+      "reviews" : {
+        "-MYpb1G07REDTSiEWCM3" : {
+          "content" : "wer",
+          "date" : "21.04.2021, 21:05:49",
+          "email" : "1@mail.ru",
+          "rating" : "4",
+          "title" : "wer",
+          "username" : "Meme"
+        },
+        "-MYpfMHUgASE-F95ipsq" : {
+          "content" : "zxc",
+          "date" : "21.04.2021, 21:24:44",
+          "email" : "1@mail.ru",
+          "rating" : "5",
+          "title" : "zxc",
+          "username" : "Meme"
+        },
+        "-MYzczCU9uzSkur30zXW" : {
+          "content" : "qwewwqwqe1111",
+          "date" : "23.04.2021, 19:50:37",
+          "email" : "1@mail.ru",
+          "rating" : "5",
+          "title" : "sdfdfs",
+          "username" : "Meme"
+        },
+        "-MZIjji7bO3aaezNY0FJ" : {
+          "content" : "qweqweaaa",
+          "date" : "27.04.2021, 17:32:33",
+          "email" : "1@mail.ru",
+          "rating" : "5",
+          "title" : "qweqwe",
+          "username" : "Meme"
+        }
+      },
+      "steeping" : "4-5 min",
+      "temperature" : "212°F / 100°C"
+    },
+    "Users" : {
+      "Nname" : {
+        "cost" : "1$",
+        "description" : "Desc",
+        "email" : "test@test.test",
+        "place" : "",
+        "uid" : "78mxfp4zoicAvu4redjaZaEp6rw2",
+        "username" : "ttest"
+      },
+      "dfassd" : {
+        "cost" : "12.3$",
+        "description" : "dsa",
+        "email" : "1@mail.ru",
+        "link" : "https://firebasestorage.googleapis.com/v0/b/teadb-34ad1.appspot.com/o/images%2FfZB15D91tPcHLw1zYQ53SVqsq7X2%2Fdfassd?alt=media&token=2efa8ca0-eff2-436e-ab3a-76eeaeda0b51",
+        "place" : "dd",
+        "rating" : 3,
+        "reviews" : {
+          "-MYonAa08hrzTeUXAAKX" : {
+            "content" : "qre",
+            "date" : "21.04.2021, 17:19:16",
+            "email" : "1@mail.ru",
+            "rating" : "3",
+            "title" : "rrr",
+            "username" : "Meme"
+          },
+          "-MYpRd4SOa3-s62LL93c" : {
+            "content" : "sdf",
+            "date" : "21.04.2021, 20:20:25",
+            "email" : "1@mail.ru",
+            "rating" : "3",
+            "title" : "dsf",
+            "username" : "Meme"
+          },
+          "-MYx3LDFYOB4CgxdXQkP" : {
+            "content" : "dsdsdsdsdsdsd",
+            "date" : "23.04.2021, 07:51:17",
+            "email" : "1@mail.ru",
+            "rating" : "4",
+            "title" : "sdsdds",
+            "username" : "Meme"
+          },
+          "-MZexA5QK0CDfASWU88F" : {
+            "content" : "DSADASD",
+            "date" : "02.05.2021, 05:42:28",
+            "email" : "1@mail.ru",
+            "rating" : "2",
+            "title" : "2333333333R",
+            "username" : "Meme"
+          }
+        },
+        "uid" : "fZB15D91tPcHLw1zYQ53SVqsq7X2",
+        "username" : "Meme"
+      },
+      "dfg" : {
+        "cost" : "11$",
+        "description" : "g",
+        "email" : "1@mail.ru",
+        "link" : "https://firebasestorage.googleapis.com/v0/b/teadb-34ad1.appspot.com/o/images%2FfZB15D91tPcHLw1zYQ53SVqsq7X2%2Fdfg?alt=media&token=a9bf7d8d-40d7-414c-ae7f-142e689ee7fc",
+        "place" : "",
+        "rating" : 4.5,
+        "reviews" : {
+          "-MYpRjQLbxy_RzfgOI2v" : {
+            "content" : "sdf",
+            "date" : "21.04.2021, 20:20:51",
+            "email" : "1@mail.ru",
+            "rating" : "5",
+            "title" : "sdf",
+            "username" : "Meme"
+          },
+          "-MZfCBm79eq81paDxnsU" : {
+            "content" : "assa",
+            "date" : "02.05.2021, 06:52:29",
+            "email" : "1@mail.ru",
+            "rating" : "4",
+            "title" : "ds23",
+            "username" : "Meme"
+          }
+        },
+        "uid" : "fZB15D91tPcHLw1zYQ53SVqsq7X2",
+        "username" : "Meme"
+      },
+      "fdg" : {
+        "cost" : "2.79$",
+        "description" : "dfg",
+        "email" : "1@mail.ru",
+        "link" : "https://firebasestorage.googleapis.com/v0/b/teadb-34ad1.appspot.com/o/images%2FfZB15D91tPcHLw1zYQ53SVqsq7X2%2Ffdg?alt=media&token=dd87c9ab-b42b-4494-8d0a-074672257f88",
+        "place" : "gfdg",
+        "rating" : 5,
+        "reviews" : {
+          "-MYpRq1Snx3n17Fc1E27" : {
+            "content" : "sdf",
+            "date" : "21.04.2021, 20:21:18",
+            "email" : "1@mail.ru",
+            "rating" : "5",
+            "title" : "sdf",
+            "username" : "Meme"
+          },
+          "-MZfCH3jhAmXk-g1BfMY" : {
+            "content" : "321",
+            "date" : "02.05.2021, 06:52:51",
+            "email" : "1@mail.ru",
+            "rating" : "5",
+            "title" : "123",
+            "username" : "Meme"
+          }
+        },
+        "uid" : "fZB15D91tPcHLw1zYQ53SVqsq7X2",
+        "username" : "Meme"
+      },
+      "werwer" : {
+        "cost" : "9.99$",
+        "description" : "werwer",
+        "email" : "1@mail.ru",
+        "link" : "https://firebasestorage.googleapis.com/v0/b/teadb-34ad1.appspot.com/o/images%2FfZB15D91tPcHLw1zYQ53SVqsq7X2%2Fwerwer?alt=media&token=7a88e0cc-02c7-4a36-8c5a-fd90c531571b",
+        "place" : "wer",
+        "rating" : 4.5,
+        "reviews" : {
+          "-MYpRsB4QsZFvKuznjeW" : {
+            "content" : "tgtgt",
+            "date" : "21.04.2021, 20:21:27",
+            "email" : "1@mail.ru",
+            "rating" : "4",
+            "title" : "gtgtg",
+            "username" : "Meme"
+          },
+          "-MZz8nrKNOQbe3mbVKg1" : {
+            "content" : "zcxzzcxczxczx",
+            "date" : "06.05.2021, 03:50:04",
+            "email" : "16@mail.ru",
+            "rating" : "5",
+            "title" : "saasddd",
+            "username" : "tepa"
+          }
+        },
+        "uid" : "fZB15D91tPcHLw1zYQ53SVqsq7X2",
+        "username" : "Meme"
+      }
+    }
+  },
+  "Green" : {
+    "Fiji" : {
+      "brand" : "Sencha Tea Bar",
+      "cost" : "6.58$",
+      "energy" : "Medium Caffeine ",
+      "facts" : [ "Fiji blends traditional Chinese green tea with pieces of dried pineapple and natural papaya flavor for a fruit-forward cup with grassy undernotes. ", "This blend makes excellent iced tea and is the perfect addition to your daily routine." ],
+      "item_form" : "Loose leaves",
+      "origin" : "China",
+      "rating" : 5,
+      "reviews" : {
+        "-MYpqulngCDtJGtebY7B" : {
+          "content" : "xzczxcv",
+          "date" : "21.04.2021, 22:15:13",
+          "email" : "1@mail.ru",
+          "rating" : "5",
+          "title" : "zxcvzxc",
+          "username" : "Meme"
+        },
+        "-MZf4nSBdHua4zRa3c9a" : {
+          "content" : "asd",
+          "date" : "02.05.2021, 06:20:10",
+          "email" : "1@mail.ru",
+          "rating" : "5",
+          "title" : "123",
+          "username" : "Meme"
+        }
+      },
+      "steeping" : "2-3 min",
+      "temperature" : "190°F / 88°C"
+    },
+    "Juicy Pear" : {
+      "brand" : "Sencha Tea Bar",
+      "cost" : "8.58$",
+      "energy" : "Medium Caffeine",
+      "facts" : [ "Juicy Pear offers a spin on traditional Chinese green tea with the addition of sweet pear pieces and natural pear flavor for a deliciously fruity cup.", "This blend is characterized by slight citrus notes and forward pear flavor that will make you feel as if you've bitten into ripe summer fruit." ],
+      "item_form" : "Loose leaves",
+      "origin" : "China",
+      "rating" : 4,
+      "reviews" : {
+        "-MYpqtAg2wXdXssmirtf" : {
+          "content" : "sdfsdf",
+          "date" : "21.04.2021, 22:15:06",
+          "email" : "1@mail.ru",
+          "rating" : "3",
+          "title" : "sfsdf",
+          "username" : "Meme"
+        },
+        "-MZEHSqCcYGNNSiLCIkk" : {
+          "content" : "asdasdasd",
+          "date" : "26.04.2021, 20:46:06",
+          "email" : "1@mail.ru",
+          "rating" : "5",
+          "title" : "asdasda",
+          "username" : "Meme"
+        }
+      },
+      "steeping" : "2-3 min",
+      "temperature" : "190°F / 88°C"
+    },
+    "Users" : {
+      "adsdasd" : {
+        "cost" : "23$",
+        "description" : "assaasas123123",
+        "email" : "1@mail.ru",
+        "link" : "https://firebasestorage.googleapis.com/v0/b/teadb-34ad1.appspot.com/o/images%2FfZB15D91tPcHLw1zYQ53SVqsq7X2%2Fadsdasd?alt=media&token=c11aacb5-582d-49ae-b4c2-fce984c04ecc",
+        "place" : "1asdad",
+        "uid" : "fZB15D91tPcHLw1zYQ53SVqsq7X2",
+        "username" : "Meme"
+      },
+      "choco-poco" : {
+        "cost" : "3.26$",
+        "description" : "123123asdsasdasdds",
+        "email" : "1@mail.ru",
+        "link" : "https://firebasestorage.googleapis.com/v0/b/teadb-34ad1.appspot.com/o/images%2FfZB15D91tPcHLw1zYQ53SVqsq7X2%2Fchoco-poco?alt=media&token=c5734423-d342-4840-b456-e65d12168487",
+        "place" : "here",
+        "rating" : 4,
+        "reviews" : {
+          "-MZ3DkxcHx8UwKi2_lQE" : {
+            "content" : "ddd",
+            "date" : "24.04.2021, 17:14:06",
+            "email" : "3@mail.ru",
+            "rating" : "4",
+            "title" : "asdsad",
+            "username" : "Meme11213"
+          }
+        },
+        "uid" : "fZB15D91tPcHLw1zYQ53SVqsq7X2",
+        "username" : "Meme"
+      },
+      "qwerrdgdg" : {
+        "cost" : "34$",
+        "description" : "tyrtyr",
+        "email" : "33@mail.ru",
+        "place" : "fffff",
+        "rating" : 3,
+        "reviews" : {
+          "-MZzCA5oBOH4fNHIpL1C" : {
+            "content" : "nvnvn",
+            "date" : "06.05.2021, 04:04:46",
+            "email" : "33@mail.ru",
+            "rating" : "3",
+            "title" : "vvbvb",
+            "username" : "B"
+          }
+        },
+        "uid" : "NVKEVIybQ7TFqLTPsQRjib2FrIt2",
+        "username" : "B"
+      },
+      "zxzz" : {
+        "cost" : "3.4$",
+        "description" : "asd",
+        "email" : "1@mail.ru",
+        "place" : "",
+        "uid" : "fZB15D91tPcHLw1zYQ53SVqsq7X2",
+        "username" : "Meme"
+      }
+    }
+  },
+  "Iced" : {
+    "Users" : {
+      "new1" : {
+        "cost" : "11$",
+        "description" : "qw",
+        "email" : "1@mail.ru",
+        "place" : "ssss",
+        "rating" : 3,
+        "reviews" : {
+          "-MZfFqmzYpwW0WnZmhXa" : {
+            "content" : "xcxc",
+            "date" : "02.05.2021, 07:08:28",
+            "email" : "1@mail.ru",
+            "rating" : "3",
+            "title" : "xcxc",
+            "username" : "Meme"
+          }
+        },
+        "uid" : "fZB15D91tPcHLw1zYQ53SVqsq7X2",
+        "username" : "Meme"
+      },
+      "tttvv" : {
+        "cost" : "32.95$",
+        "description" : "asda",
+        "email" : "33@mail.ru",
+        "place" : "ddd",
+        "uid" : "jZ9inlpnlCNwAGIGVlx2hedsgBX2",
+        "username" : "MemeBoi"
+      }
+    }
+  },
+  "collections" : {
+    "Black" : {
+      "id" : 1,
+      "img_name" : "black_200x"
+    },
+    "Green" : {
+      "id" : 2,
+      "img_name" : "green_200x"
+    },
+    "Iced" : {
+      "id" : 3,
+      "img_name" : "iced_200x"
+    }
+  },
+  "users" : {
+    "Meme" : {
+      "email" : "1@mail.ru",
+      "uid" : "fZB15D91tPcHLw1zYQ53SVqsq7X2"
+    },
+    "Meme11213" : {
+      "email" : "3@mail.ru",
+      "uid" : "8omuXacaH8NAVhU2SckvGzlPN1C3"
+    },
+    "MemeBoi" : {
+      "email" : "33@mail.ru",
+      "uid" : "jZ9inlpnlCNwAGIGVlx2hedsgBX2"
+    },
+    "Memeqwe" : {
+      "email" : "2@mail.ru",
+      "uid" : "pJFXD8rGeEQGBoJticG2mDoDgdb2"
+    },
+    "Memezxccxzcxz" : {
+      "email" : "15@mail.ru",
+      "uid" : "LqnjwY3ZXggzdkMxRTVOx3yBiJf1"
+    },
+    "bro19" : {
+      "email" : "11@mail.ru",
+      "uid" : "h7vl8GzSCmcnaAVCl6qEsbStWLe2"
+    },
+    "tepa" : {
+      "email" : "16@mail.ru",
+      "uid" : "GacTPpaStbNUElJ2csHUIaT31kC2"
+    },
+    "ttest" : {
+      "email" : "test@test.test",
+      "uid" : "78mxfp4zoicAvu4redjaZaEp6rw2"
+    },
+    "user" : {
+      "email" : "user@user.by",
+      "uid" : "ElS6DMYkEsWVeOrHLOsAUWZLES72"
+    }
+  }
+}
